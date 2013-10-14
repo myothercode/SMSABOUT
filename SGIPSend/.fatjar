@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Mon Oct 14 20:20:45 CST 2013
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=true
+jarname=sms_new_send131014.jar
+manifest.mergeall=true
+manifest.mainclass=com.main.mainSend
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=
