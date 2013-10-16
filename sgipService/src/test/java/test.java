@@ -1,9 +1,13 @@
 import com.sgip.comm.service.TestService;
+import com.sgip.domain.VO.SMSBody;
+import com.utils.CommUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.lang.reflect.Method;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +23,16 @@ public class test {
     private TestService  testService;
 
     @Test
-    public void test1(){
+    public void test1() throws Exception{
+        //String s= QueueAndPools.threadPoolNum;
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+       // Class.forName(info[0], true, classLoader)
+        Object smsBody=new SMSBody();
+        Method method= smsBody.getClass().getMethod("setInnum",long.class);
+        Method[] dd=smsBody.getClass().getMethods()
+
+        method.invoke(smsBody,98);
+
         testService.test();
     }
 

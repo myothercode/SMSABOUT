@@ -1,6 +1,7 @@
 package com.sgip.comm.service.impl;
 
 import com.sgip.comm.service.TestService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,8 +13,13 @@ import org.springframework.stereotype.Service;
  */
 @Service("testServiceImpl")
 public class TestServiceImpl implements TestService {
+    //@Value("${thread.PoolNum}")
+
+   // @Value("#{settings['thread.PoolNum']}")
+
+
     @Override
     public void test() {
-        System.out.println("jjjjj");
+        System.out.println("cc");
     }
 }
