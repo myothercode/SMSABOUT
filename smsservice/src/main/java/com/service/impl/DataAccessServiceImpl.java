@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.domainVO.ActiveVo;
 import com.domainVO.LoginVo;
 import com.domainVO.SessionVo;
 import com.domainVO.SmsBody;
@@ -26,6 +27,7 @@ public class DataAccessServiceImpl implements DataAccessService {
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    /*发送短信*/
     public void insertSend(SmsBody smsBody){
         String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
                 "values(?,?,?,'000000','0',null,null,?)";
@@ -34,6 +36,15 @@ public class DataAccessServiceImpl implements DataAccessService {
         jdbcTemplate.update(sql,parm);
     }
 
+    /*新增加一个活动*/
+    public void insertActive(ActiveVo activeVo){
+         String sql="insert into sms_hd_tb(hdid,msg,user_id) values(?,?,?)";
+        activeVo.setHdid("GPS"+activeVo.getHdid());
+        Object parm=new Object[]{activeVo.getHdid(),activeVo.getMsg(),activeVo.getUser_id()};
+        jdbcTemplate.update(sql,parm);
+    }
+
+    /*登录信息查询*/
     public SessionVo getLoginVo(LoginVo loginVo){
        String sql="select id,name,role from sms_user_tb where status=0 and id=? and password=?";
         Object[] parm=new Object[]{loginVo.getUserId(),loginVo.getPassWord()};

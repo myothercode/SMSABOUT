@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.domainVO.ActiveVo;
 import com.domainVO.LoginVo;
 import com.domainVO.SessionVo;
 import com.domainVO.SmsBody;
@@ -51,6 +52,22 @@ public class SmsController{
      public String smsPage(){
         return "smsPage";
      }
+
+    @RequestMapping(value = "/sms/insertActive")
+    @ResponseBody
+    public Object insertActive(HttpSession session,ActiveVo activeVo){
+        activeVo.setHdid("".equals(activeVo.getHdid())?null:activeVo.getHdid());
+        activeVo.setMsg("".equals(activeVo.getMsg())?null:activeVo.getMsg());
+        activeVo.setUser_id("".equals(activeVo.getUser_id())?null:activeVo.getUser_id());
+
+        Assert.notNull(activeVo.getHdid(),"参数为空!");
+        Assert.notNull(activeVo.getMsg(),"参数为空!");
+        Assert.notNull(activeVo.getUser_id(),"参数为空!");
+
+        dataAccessService.insertActive(activeVo);
+
+        return "ok";
+    }
 
     /*发送短信*/
     @RequestMapping(value = "/sms/sendSMS")

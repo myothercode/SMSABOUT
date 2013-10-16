@@ -17,11 +17,28 @@
 <body>
 <div id="message" style="width: 200px"></div>
 <form action="" method="post" >
-    <table align="left">
+    <table align="left" width="100%">
         <tr>
+            <td>发送短信：&nbsp;&nbsp;</td>
             <td>手机号码<input id="phoneNo" name="phoneNo" onkeypress="return inputOnlyNUM(event,this)"/></td>
             <td>信息内容<input id="msg" name="msg"/></td>
             <td><button type="button" onclick="submitSms()" value="提交">提交</button></td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    <table align="left" width="100%" >
+        <tr>
+            <td>增加业务：&nbsp;&nbsp;</td>
+            <td>业务代码&nbsp;GPS<input id="hdid" /></td>
+            <td>业务提示内容<input id="amsg" /> </td>
+
+        </tr>
+        <tr>
+            <td></td>
+            <td>商家id<input id="user_id" /> </td>
+            <td><button type="button" onclick="insertActive()" value="提交">提交</button></td>
         </tr>
     </table>
 </form>

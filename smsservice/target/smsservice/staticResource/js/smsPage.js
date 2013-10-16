@@ -12,15 +12,9 @@
  });
 /*提交短信*/
 function submitSms(){
-
     var phoneNo=$("#phoneNo").val();
     var msg=$("#msg").val();
     if(!strIsNull(phoneNo)&&!strIsNull(msg)){
-        /*$.post('/smsservice/sms/sendSMS',{phoneNo:phoneNo,msg:msg},function(data){
-            $("#phoneNo").val('');
-            $("#msg").val('');
-           alert(data);
-        },"html");*/
         $.ajax({
             url: "/smsservice/sms/sendSMS",
             type: "post",
@@ -37,6 +31,33 @@ function submitSms(){
             }
              });
 
+    }else{
+        alert("请填入必要信息！")
+    }
+}
+
+/*添加活动*/
+function insertActive(){
+    var hdid=$('#hdid').val();
+    var amsg=$('#amsg').val();
+    var user_id=$('#user_id').val();
+    if(!strIsNull(hdid)&&!strIsNull(amsg)&&!strIsNull(user_id)){
+        $.ajax({
+            url: "/smsservice/sms/insertActive",
+            type: "post",
+            dataType: "html",
+            async: false,
+            data: {hdid:hdid,msg:amsg,user_id:user_id},
+            success:function(data){
+                $("#hdid").val('');
+                $("#amsg").val('');
+                $("#user_id").val('');
+                alert(data);
+            },
+            error:function(Request, textStatus, errorThrown){
+                alert("提交出错");
+            }
+        });
     }else{
         alert("请填入必要信息！")
     }

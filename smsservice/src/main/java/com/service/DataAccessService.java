@@ -1,5 +1,6 @@
 package com.service;
 
+import com.domainVO.ActiveVo;
 import com.domainVO.LoginVo;
 import com.domainVO.SessionVo;
 import com.domainVO.SmsBody;
@@ -14,4 +15,5 @@ import com.domainVO.SmsBody;
 public interface DataAccessService {
     public void insertSend(SmsBody smsBody);
     public SessionVo getLoginVo(LoginVo loginVo);
+    public void insertActive(ActiveVo activeVo);
 }
