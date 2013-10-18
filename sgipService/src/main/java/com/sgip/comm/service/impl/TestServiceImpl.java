@@ -1,6 +1,7 @@
 package com.sgip.comm.service.impl;
 
 import com.sgip.comm.service.TestService;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void test() {
+
         System.out.println("cc");
     }
 }

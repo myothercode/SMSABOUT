@@ -18,10 +18,17 @@
             </list>
         </property>
     </bean>
-
     <context:annotation-config />
-    <context:component-scan base-package="com.sgip.**.service.impl">
+    <context:component-scan base-package="com.sgip.**.service.impl,com.main.**">
     </context:component-scan>
+<!--线程池-->
+    <bean id="taskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="1" />
+        <property name="keepAliveSeconds" value="200" />
+        <property name="maxPoolSize" value="2" />
+        <property name="queueCapacity" value="25" />
+    </bean>
 
 </beans>
 
