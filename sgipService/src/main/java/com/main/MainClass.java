@@ -1,6 +1,7 @@
 package com.main;
 
 import com.main.task.SubmitSMS;
+import com.sgip.domain.QueueAndPools;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
@@ -18,12 +19,16 @@ import org.springframework.core.task.TaskExecutor;
 public class MainClass {
     private static Log log = LogFactory.getLog(MainClass.class);
     public static ApplicationContext applicationContext=new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
-    private static TaskExecutor taskExecutor;
+
 
     public static void main(String[] args) {
-        log.info("hello commons-logging!");
-        taskExecutor=applicationContext.getBean("taskExecutor",TaskExecutor.class);
-        taskExecutor.execute(new SubmitSMS());
+        log.info("hello app is runing..........");
+        if (QueueAndPools.taskExecutor==null)
+        QueueAndPools.taskExecutor=applicationContext.getBean("taskExecutor",TaskExecutor.class);
+        //SubmitSMS submitSMS=new SubmitSMS();
+
+        QueueAndPools.taskExecutor.execute(new SubmitSMS("xiancheng1"));
+
 
 
     }

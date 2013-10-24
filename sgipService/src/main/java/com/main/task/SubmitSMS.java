@@ -1,5 +1,7 @@
 package com.main.task;
 
+import com.main.MainClass;
+import com.sgip.comm.service.impl.GetFromDB;
 import com.sgip.domain.QueueAndPools;
 import com.sgip.domain.VO.BuesinessVO;
 import com.sgip.domain.VO.SMSBody;
@@ -7,6 +9,9 @@ import com.sgip.domain.sgip.action.Bind;
 import com.sgip.domain.sgip.action.Submit;
 import com.sgip.domain.sgip.action.UnBind;
 import com.sgip.domain.sgip.part.BuesinessClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 
 import java.io.DataInputStream;
@@ -23,7 +28,7 @@ import static com.sgip.domain.VO.SPConfig.*;
  * Time: 下午4:55
  * To change this template use File | Settings | File Templates.
  */
-/*@Component
+/*@Service("submitSMS")
 @Scope("prototype")*/
 public class SubmitSMS implements Runnable{
     private static BuesinessClass buesiness=new BuesinessClass();
@@ -31,32 +36,65 @@ public class SubmitSMS implements Runnable{
     private DataOutputStream Dos;
     private DataInputStream Dis;
     private Socket mySocket;
+    private String threadName="";
 
-    public SubmitSMS(){
+    private GetFromDB getFromDB;
+
+    public SubmitSMS(String threadName){
+       this.threadName=threadName;
+    }
+
+    public void conectserver() throws Exception{
         try{
             //Properties props = PropertiesLoaderUtils.loadProperties(resource);
             if(mySocket==null||mySocket.isClosed()){
                 System.out.println("连接到服务器...............");
                 mySocket = new Socket("10.143.4.71",8801);
+                //mySocket = new Socket("127.0.0.1",8801);
             }
             Dis=new DataInputStream(mySocket.getInputStream());
             Dos=new DataOutputStream(mySocket.getOutputStream());
+            sendBind();//绑定
         }catch(Exception e){e.printStackTrace();}
     }
 
     @Override
     public void run() {
-
+        Thread.currentThread().setName(this.threadName);
         try {
             /*Thread.sleep(1);
             System.out.println("send sms........");*/
             //QueueAndPools.smsQueue.take();
-            sendBind();//绑定操作
-            sendSumbit();//提交短信
-            sendUnBind();//注销操作
+            SMSBody smsBody=null;
+            int m=0;
+            while (true){
+               // System.out.println("send sms ...");
+                try {smsBody = QueueAndPools.smsQueue.take();} catch (InterruptedException e) { e.printStackTrace();}
+                try {
+                    conectserver();
+                    sendSumbit(smsBody);//提交短信
+                    m=QueueAndPools.atomicInteger.addAndGet(1);
+                    if(QueueAndPools.smsQueue.isEmpty() || m>=20){
+                        sendUnBind();
+                        QueueAndPools.atomicInteger.set(1);
+                    }
+                } catch (Exception e) { closeMySocket();e.printStackTrace(); }
+                System.out.println("队列中还有"+QueueAndPools.smsQueue.size());
+                if(getFromDB==null){
+                    getFromDB = (GetFromDB)MainClass.applicationContext.getBean("getFromDB");
+                }
+                getFromDB.updateFlag(smsBody.getInnum());
+               /*int n= QueueAndPools.incram.addAndGet(1);
+                if(n>=1000)QueueAndPools.incram.set(1);*/
+            }
+            //conectserver();
+            //sendBind();//绑定操作
+           //sendSumbit();//提交短信
+            //sendUnBind();//注销操作
         } catch (Exception e) {
             e.printStackTrace();
-            closeMySocket();
+            try {
+                closeMySocket(); } catch (Exception e1) { e1.printStackTrace();  }
         }
 
     }
@@ -81,8 +119,8 @@ public class SubmitSMS implements Runnable{
     }
 
     /*发送短信*/
-    public void sendSumbit(){
-        SMSBody smsBody=new SMSBody();//从数据库获取  TODO: handle exception
+    public void sendSumbit(SMSBody smsBody) throws Exception{
+       // SMSBody smsBody=new SMSBody();//从数据库获取  TODO: handle exception
         if(smsBody==null|| "".equals(smsBody.getMobile_no()) ) {
             System.out.println("没有数据...");
             return;
@@ -195,7 +233,7 @@ public class SubmitSMS implements Runnable{
 
     }
 
-    public void closeMySocket(){
+    public void closeMySocket() throws Exception{
         try {
             this.Dis.close();
             this.Dos.close();

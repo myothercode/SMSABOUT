@@ -20,8 +20,29 @@
         </property>
     </bean>
     <context:annotation-config />
-    <context:component-scan base-package="com.sgip.**.service.impl,com.main.**">
+    <context:component-scan base-package="com.sgip.**.service.impl">
     </context:component-scan>
+    <context:component-scan base-package="com.main.task">
+    </context:component-scan>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+        <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;DatabaseName=SGIP"></property>
+        <property name="user" value="cncsp"></property>
+        <property name="password" value="cncsp123"></property>
+        <property name="initialPoolSize" value="5"></property>
+        <property name="maxPoolSize" value="60"></property>
+        <property name="acquireIncrement" value="2"></property>
+        <property name="idleConnectionTestPeriod" value="60"></property>
+        <property name="maxIdleTime" value="250"></property>
+    </bean>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" abstract="false" lazy-init="false" autowire="default">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+
+
 <!--线程池-->
     <bean id="taskExecutor"
           class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
