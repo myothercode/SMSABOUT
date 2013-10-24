@@ -1,12 +1,11 @@
 package com.main;
 
-import com.sgip.comm.service.TestService;
-import com.sgip.comm.service.impl.GetFromDB;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.main.task.SubmitSMS;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.core.task.TaskExecutor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,29 +16,18 @@ import org.springframework.test.context.ContextConfiguration;
  */
 
 public class MainClass {
-
+    private static Log log = LogFactory.getLog(MainClass.class);
     public static ApplicationContext applicationContext=new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
-
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
-    @Autowired
-    private TestService testService;
+    private static TaskExecutor taskExecutor;
 
     public static void main(String[] args) {
+        log.info("hello commons-logging!");
+        taskExecutor=applicationContext.getBean("taskExecutor",TaskExecutor.class);
+        taskExecutor.execute(new SubmitSMS());
 
-        Object o= applicationContext.getBean("taskExecutor");
 
-        MainClass mainClass=new MainClass();
-        mainClass.runTask();
-        //taskExecutor.execute(new GetFromDB());
-        /*GetFromDB getFromDB=new GetFromDB();
-        getFromDB.testLanckTimer();
-        getFromDB.getSMS();*/
     }
 
-    public void runTask(){
-        testService.test();
-        //taskExecutor.execute(new GetFromDB());
-    }
+
 
 }
