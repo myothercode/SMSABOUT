@@ -30,7 +30,7 @@ public class GetFromDB {
     public List<SMSBody> getSmsList(){
         String sql="select top 20 sendtb.idnum, sendtb.serviceid,sendtb.mobile_no,sendtb.msg,sendtb.reserve from sms_send_tb sendtb " +
                 "left join sms_user_tb usertb on sendtb.user_id = usertb.id " +
-                "where sendtb.flag='0' usertb.totalnum>=usertb.usenum and usertb.totalnum is not null " +
+                "where sendtb.flag='0' and usertb.totalnum>=usertb.usenum and usertb.totalnum is not null " +
                 "order by sendtb.idnum asc";
         //Object[] params = new Object[]{loginId};
         List<SMSBody> list=jdbcTemplate.query(sql,new DataMapperD());
@@ -39,7 +39,7 @@ public class GetFromDB {
     }
 
     public void updateFlag(Long id){
-        String sql="update sms_send_tb set flag='1', where flag='0',sendTime=getdate() and idnum=?";
+        String sql="update sms_send_tb set flag='1',sendTime=getdate() where flag='0' and idnum=?";
         Object[] params = new Object[]{id};
         jdbcTemplate.update(sql,params);
     }

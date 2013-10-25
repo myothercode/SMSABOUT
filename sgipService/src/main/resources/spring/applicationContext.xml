@@ -20,10 +20,9 @@
         </property>
     </bean>
     <context:annotation-config />
-    <context:component-scan base-package="com.sgip.**.service.impl">
-    </context:component-scan>
-    <context:component-scan base-package="com.main.task">
-    </context:component-scan>
+    <context:component-scan base-package="com.sgip.**.service.impl,com.main.task" />
+
+
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
@@ -53,7 +52,7 @@
     </bean>
 
     <!--定时任务-->
-     <bean class="com.main.task.ScheduledTask" id="scheduledTask"></bean>
+     <bean class="com.main.task.ScheduledTask" id="scheduledTask"/>
     <task:scheduled-tasks>
         <task:scheduled ref="scheduledTask" method="getSmsFronDB" cron="2/5 * * * * ?"/><!--延迟3秒启动间隔8秒-->
     </task:scheduled-tasks>

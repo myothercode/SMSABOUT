@@ -79,7 +79,7 @@ public class SubmitSMS implements Runnable{
                         QueueAndPools.atomicInteger.set(1);
                     }
                 } catch (Exception e) { closeMySocket();e.printStackTrace(); }
-                System.out.println("队列中还有"+QueueAndPools.smsQueue.size());
+                System.out.println("队列中还有"+QueueAndPools.smsQueue.size()+"条");
                 if(getFromDB==null){
                     getFromDB = (GetFromDB)MainClass.applicationContext.getBean("getFromDB");
                 }

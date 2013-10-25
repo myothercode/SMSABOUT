@@ -21,6 +21,6 @@ public class QueueAndPools {
     public static AtomicInteger atomicInteger = new AtomicInteger(1);//计数器 int n= DicomQueue.atomicInteger.addAndGet(1);  if(n>=100)DicomQueue.atomicInteger.set(1);
     public static TaskExecutor taskExecutor;  //定时获取数据的线程
 
-    public static AtomicInteger incram = new AtomicInteger(1);//判断线程是否还在运行
-    public static AtomicInteger isRuning = new AtomicInteger(1);//判断线程是否还在运行
+    //public static AtomicInteger incram = new AtomicInteger(1);//判断线程是否还在运行
+    //public static AtomicInteger isRuning = new AtomicInteger(1);//判断线程是否还在运行
 }
