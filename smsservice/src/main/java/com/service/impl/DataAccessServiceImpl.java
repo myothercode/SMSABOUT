@@ -39,8 +39,7 @@ public class DataAccessServiceImpl implements DataAccessService {
     /*新增加一个活动*/
     public void insertActive(ActiveVo activeVo){
          String sql="insert into sms_hd_tb(hdid,msg,user_id) values(?,?,?)";
-        activeVo.setHdid("GPS"+activeVo.getHdid());
-        Object parm=new Object[]{activeVo.getHdid(),activeVo.getMsg(),activeVo.getUser_id()};
+        Object[] parm=new Object[]{activeVo.getHdid(),activeVo.getMsg(),activeVo.getUser_id()};
         jdbcTemplate.update(sql,parm);
     }
 
