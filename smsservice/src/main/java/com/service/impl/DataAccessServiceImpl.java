@@ -6,11 +6,13 @@ import com.domainVO.SessionVo;
 import com.domainVO.SmsBody;
 import com.service.DataAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -50,6 +52,29 @@ public class DataAccessServiceImpl implements DataAccessService {
         List<SessionVo> list = jdbcTemplate.query(sql, parm, new SessionMapper());
         if(list==null||list.isEmpty())return null;
         return (SessionVo)list.get(0);
+    }
+
+    /*批量插入短信*/
+    public void batchSendSMS(final List<SmsBody> smsBodyList){
+        if(smsBodyList.isEmpty())return;
+        String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
+                "values(?,?,?,'000000','0',null,null,?)";
+        jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                preparedStatement.getConnection().setAutoCommit(true);
+                SmsBody smsBody=(SmsBody)smsBodyList.get(i);
+                preparedStatement.setString(1,smsBody.getServiceId());
+                preparedStatement.setString(2,smsBody.getPhoneNo());
+                preparedStatement.setString(3,smsBody.getMsg());
+                preparedStatement.setLong(4,smsBody.getUserId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return smsBodyList.size();
+            }
+        }) ;
     }
 
 

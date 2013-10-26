@@ -5,6 +5,8 @@ import com.domainVO.LoginVo;
 import com.domainVO.SessionVo;
 import com.domainVO.SmsBody;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wula
@@ -16,4 +18,5 @@ public interface DataAccessService {
     public void insertSend(SmsBody smsBody);
     public SessionVo getLoginVo(LoginVo loginVo);
     public void insertActive(ActiveVo activeVo);
+    public void batchSendSMS(final List<SmsBody> smsBodyList);
 }

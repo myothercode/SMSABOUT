@@ -10,14 +10,17 @@
 <html>
 <head>
     <title></title>
+    <link rel="stylesheet" href="/smsservice/staticResource/css/ajaxfileupload.css" type="text/css" />
+    <link rel="stylesheet" href="/smsservice/staticResource/css/mycss.css" type="text/css" />
     <script src="/smsservice/staticResource/js/jquery-1.8.2.min.js" type="text/javascript"></script>
     <script src="/smsservice/staticResource/js/smsPage.js" type="text/javascript"></script>
     <script src="/smsservice/staticResource/js/utils.js" type="text/javascript"></script>
+    <script src="/smsservice/staticResource/js/ajaxfileupload.js" type="text/javascript"></script>
 </head>
 <body>
-<div id="message" style="width: 200px"></div>
-<form action="" method="post" >
-    <table align="left" width="100%">
+<div><br>
+
+    <table align="left" width="100%" class="divborder">
         <tr>
             <td>发送短信：&nbsp;&nbsp;</td>
             <td>手机号码<input id="phoneNo" name="phoneNo" onkeypress="return inputOnlyNUM(event,this)"/></td>
@@ -25,10 +28,17 @@
             <td><button type="button" onclick="submitSms()" value="提交">提交</button></td>
         </tr>
     </table>
-    <br>
-    <br>
-    <br>
-    <table align="left" width="100%" >
+
+    <table align="left" width="100%" class="divborder"  style="margin-top: 50px">
+        <tr>
+            <td>批量发送短信：&nbsp;&nbsp;</td>
+            <td>导入号码<input type="file" id="multipartFiles" name="multipartFiles"/></td>
+            <td>信息内容<input id="msg2" name="msg"/></td>
+            <td><button type="button" onclick="batchSubmitSms()" value="提交">提交</button></td>
+        </tr>
+    </table>
+
+    <table align="left" width="100%" class="divborder" style="margin-top: 50px">
         <tr>
             <td>增加业务：&nbsp;&nbsp;</td>
             <td>业务代码&nbsp;GPS<input id="hdid" /></td>
@@ -41,6 +51,6 @@
             <td><button type="button" onclick="insertActive()" value="提交">提交</button></td>
         </tr>
     </table>
-</form>
+</div>
 </body>
 </html>

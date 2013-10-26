@@ -5,8 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-
-
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/sms/*"/>
@@ -29,6 +27,12 @@
     </mvc:annotation-driven>
     <context:annotation-config />
     <context:component-scan base-package="com.*.*,com.*" />
+
+    <!-- SpringMVC上传文件时,需配置MultipartResolver处理器 yyyyyyy-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 指定所上传文件的总大小不能超过800KB......注意maxUploadSize属性的限制不是针对单个文件,而是所有文件的容量之和 -->
+        <property name="maxUploadSize" value="2000000"/>
+    </bean>
 
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
