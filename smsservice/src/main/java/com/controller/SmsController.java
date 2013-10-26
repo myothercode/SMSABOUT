@@ -28,7 +28,7 @@ public class SmsController{
 
     public static final String SESSION_KEY="system_session_sms_11111";
 
-    /*登录*/
+    /*登录**/
     @RequestMapping("/login/loginUser")
     public String loginUser(HttpServletRequest request,LoginVo loginVo){
         if(loginVo==null||loginVo.getUserId()==null||loginVo.getPassWord()==null)return "login";
