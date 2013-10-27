@@ -19,7 +19,7 @@ public class Submit {
 	public int MessageLength;        //4B Integer 短消息的长度
 	public String ChargeNumber;      //21B 付费号码，手机号码前加"86"国别标志；当且仅当群发且对用户收费时为空；如果为空，则该条短消息产生的费用由UserNumber代表的用户支付；如果为全零字符串"000000000000000000000"，表示该条短消息产生的费用由SP支付。
 	
-	public String SPNumber="106289975";          //21B SP的接入号码==========
+	public String SPNumber="10628997";          //21B SP的接入号码==========
 	public byte UserCount=1;           //1B 接收短消息的手机数量，取值范围1至100
 	public String CorpId="71320";            //5B 企业代码，取值范围0-99999===========
 	public String GivenValue="0";        //6B 取值范围0-99999，赠送用户的话费，单位为分，由SP定义，特指由SP向用户发送广告时的赠送话费

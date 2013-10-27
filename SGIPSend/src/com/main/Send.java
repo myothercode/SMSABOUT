@@ -85,7 +85,8 @@ public class Send extends Thread
 		
 		Submit submit=new Submit();
 		
-		Object[] objects=getServiceInfo(r[0]);		
+		Object[] objects=getServiceInfo(r[0]);	
+		submit.SPNumber=(String)objects[4];
 		submit.UserNumber=r[1];		
 		submit.ServiceType=(String)objects[0];  //业务代码
 		submit.FeeType=(Byte)objects[1];           //计费类型 1免费,2,按条计费,3包月计费

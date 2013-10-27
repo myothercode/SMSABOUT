@@ -27,10 +27,10 @@ public class SendServices {
         	stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);        
         	if("t1".equals(TName)){
         		System.out.println("宜會函方。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。");
-            rs = stmt.executeQuery("select top 1 idnum, serviceid,mobile_no,msg,reserve from sms_send_tb where flag='0' order by idnum desc"); 
+            rs = stmt.executeQuery("select top 1 idnum, serviceid,mobile_no,msg,reserve from send where flag='0' order by idnum desc"); 
         	}else{
         		System.out.println("乏會函方。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。");
-        		rs = stmt.executeQuery("select top 1 idnum, serviceid,mobile_no,msg,reserve from sms_send_tb where flag='0' order by idnum asc"); 
+        		rs = stmt.executeQuery("select top 1 idnum, serviceid,mobile_no,msg,reserve from send where flag='0' order by idnum asc"); 
         	}
             rs.first();
             serviceNumber=rs.getString("serviceid");
@@ -78,7 +78,7 @@ public class SendServices {
 		conn=cpPool.getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			 c = stmt.executeUpdate("update sms_send_tb set flag='1' where flag='0' and idnum='"+idnum+"'" );
+			 c = stmt.executeUpdate("update send set flag='1' where flag='0' and idnum='"+idnum+"'" );
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -101,8 +101,8 @@ public class SendServices {
 	 * @return
 	 */
 	public int insertLog(String mobile_no,String time,String spcode, String message,String reserve){
-		return 1;		
-		/*int c=0;
+				
+		int c=0;
 		Statement stmt=null;
 		conn=cpPool.getConnection();
 		try {
@@ -119,7 +119,7 @@ public class SendServices {
 				// TODO: handle exception
 			}
 		}
-		return c;*/
+		return c;
 	}
 
 	public int keepCheck(){
@@ -129,7 +129,7 @@ public class SendServices {
 		conn=cpPool.getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("select count(1) as co from sms_send_tb where flag='0'");
+            rs = stmt.executeQuery("select count(1) as co from send where flag='0'");
             rs.first();
             c=rs.getInt("co");
 		} catch (Exception e) {
