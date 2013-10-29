@@ -18,5 +18,7 @@ public interface DataAccessService {
     public void insertSend(SmsBody smsBody);
     public SessionVo getLoginVo(LoginVo loginVo);
     public void insertActive(ActiveVo activeVo);
-    public void batchSendSMS(final List<SmsBody> smsBodyList);
+
+    /**批量插入短信-*/
+    public int batchSendSMS(final List<SmsBody> smsBodyList);
 }

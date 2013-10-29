@@ -10,6 +10,7 @@
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
         <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;DatabaseName=SGIP"></property>
+        <!--<property name="jdbcUrl" value="jdbc:sqlserver://127.0.0.1:1433;DatabaseName=SGIP"></property>-->
         <property name="user" value="cncsp"></property>
         <property name="password" value="cncsp123"></property>
         <property name="initialPoolSize" value="5"></property>

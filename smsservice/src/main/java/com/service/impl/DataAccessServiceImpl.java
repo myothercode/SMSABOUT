@@ -31,11 +31,15 @@ public class DataAccessServiceImpl implements DataAccessService {
 
     /*发送短信*/
     public void insertSend(SmsBody smsBody){
-        String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
-                "values(?,?,?,'000000','0',null,null,?)";
-        Object[] parm=new Object[]{smsBody.getServiceId(),smsBody.getPhoneNo(),smsBody.getMsg(),smsBody.getUserId()};
-        //int[] types = new int[]{Types.INTEGER,Types.VARCHAR,Types.CHAR,Types.VARCHAR};
-        jdbcTemplate.update(sql,parm);
+        int limit=deductSMS(smsBody.getUserId(),1);
+        if(limit>0){
+            String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
+                    "values(?,?,?,'000000','0',null,null,?)";
+            Object[] parm=new Object[]{smsBody.getServiceId(),smsBody.getPhoneNo(),smsBody.getMsg(),smsBody.getUserId()};
+            //int[] types = new int[]{Types.INTEGER,Types.VARCHAR,Types.CHAR,Types.VARCHAR};
+            jdbcTemplate.update(sql,parm);
+        }
+
     }
 
     /*新增加一个活动*/
@@ -54,27 +58,44 @@ public class DataAccessServiceImpl implements DataAccessService {
         return (SessionVo)list.get(0);
     }
 
-    /*批量插入短信*/
-    public void batchSendSMS(final List<SmsBody> smsBodyList){
-        if(smsBodyList.isEmpty())return;
-        String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
-                "values(?,?,?,'000000','0',null,null,?)";
-        jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
-                preparedStatement.getConnection().setAutoCommit(true);
-                SmsBody smsBody=(SmsBody)smsBodyList.get(i);
-                preparedStatement.setString(1,smsBody.getServiceId());
-                preparedStatement.setString(2,smsBody.getPhoneNo());
-                preparedStatement.setString(3,smsBody.getMsg());
-                preparedStatement.setLong(4,smsBody.getUserId());
-            }
+    /**批量插入短信*/
+    public int batchSendSMS(final List<SmsBody> smsBodyList){
+        if(smsBodyList.isEmpty())return 0;
 
-            @Override
-            public int getBatchSize() {
-                return smsBodyList.size();
-            }
-        }) ;
+        int limit=deductSMS(smsBodyList.get(0).getUserId(),smsBodyList.size());
+        if(limit>0){
+            String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
+                    "values(?,?,?,'000000','0',null,null,?)";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                    preparedStatement.getConnection().setAutoCommit(true);
+                    SmsBody smsBody=(SmsBody)smsBodyList.get(i);
+                    preparedStatement.setString(1,smsBody.getServiceId());
+                    preparedStatement.setString(2,smsBody.getPhoneNo());
+                    preparedStatement.setString(3,smsBody.getMsg());
+                    preparedStatement.setLong(4,smsBody.getUserId());
+                }
+                @Override
+                public int getBatchSize() {
+                    return smsBodyList.size();
+                }
+            }) ;
+            return limit;
+        }else {
+            return 0;
+        }
+
+
+    }
+
+     /**查询当前用户剩余条数*/
+
+    /**扣除短信余量*/
+    private int deductSMS(Long id,int num){
+          String sql="update sms_user_tb set totalnum=totalnum-?,usenum=usenum+? where id=? and totalnum-?>0";
+          Object[] parm=new Object[]{num,num,id,num};
+          return jdbcTemplate.update(sql,parm);
     }
 
 

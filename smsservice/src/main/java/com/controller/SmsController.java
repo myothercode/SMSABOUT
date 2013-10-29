@@ -1,10 +1,8 @@
 package com.controller;
 
-import com.domainVO.ActiveVo;
-import com.domainVO.LoginVo;
-import com.domainVO.SessionVo;
-import com.domainVO.SmsBody;
+import com.domainVO.*;
 import com.service.DataAccessService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -166,5 +164,47 @@ public class SmsController{
         }
          return rsStr;
     }
+
+    /**第三方接口*/
+    @RequestMapping(value = "/sms/thirdPartImpl")
+    @ResponseBody
+    public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody){
+        if(session==null)return "请到登录页面登录！";
+        SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
+        if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
+        if(thirdSmsBody==null||"".equals(thirdSmsBody.getPhoneNo()))return "err";
+
+         String[] phones = StringUtils.split(thirdSmsBody.getPhoneNo(),",");
+        if(phones==null||phones.length==0)return "err";
+        List<SmsBody> slist=new ArrayList<SmsBody>();
+        for(String linText:phones){
+            if(linText!=null&&!"".equals(linText)&&linText.length()>=11){
+                linText=linText.trim();
+                if(linText.startsWith("1")&&linText.length()==11){
+                    SmsBody s=new SmsBody();
+                    s.setServiceId("106289975");
+                    s.setUserId(sessionVo.getId());
+                    //s.setUserId(888L);
+                    s.setPhoneNo("86"+linText);
+                    s.setMsg(thirdSmsBody.getMsg());
+                    s.setReserve("000000");
+                    slist.add(s) ;
+                }else if(linText.startsWith("8")&&linText.length()==13){
+                    SmsBody s=new SmsBody();
+                    s.setServiceId("106289975");
+                    s.setUserId(sessionVo.getId());
+                    //s.setUserId(888L);
+                    s.setPhoneNo(linText);
+                    s.setMsg(thirdSmsBody.getMsg());
+                    s.setReserve("000000");
+                    slist.add(s) ;
+                }
+            }
+        }
+        int ii= dataAccessService.batchSendSMS(slist);
+
+        return ii;
+    }
+
 
 }

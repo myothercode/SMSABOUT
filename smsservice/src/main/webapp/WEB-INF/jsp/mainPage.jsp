@@ -125,7 +125,7 @@
                 <table><tr><td>
             <![endif]-->
             <ul>
-                <li><a addr="/smsservice/sms/smsPage" title="单条测试" onclick="menuChange(this)">单条测试</a></li>
+                <li><a addr="/smsservice/sms/smsPage" title="单条测试" onclick="menuChange(this)">短信发送</a></li>
             </ul>
             <!--[if lte IE 6]>
             </td></tr></table>
@@ -189,7 +189,7 @@
 
     <div class="clear"> </div>
 </div>
-<div>
+<div style="width: 750px;height: 800px">
     <iframe width="750px" height="800px" frameborder="0px" scrolling="no" id="frame12"></iframe>
 </div>
 </body>
