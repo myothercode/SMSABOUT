@@ -60,7 +60,7 @@ public class DataAccessServiceImpl implements DataAccessService {
 
     /**批量插入短信*/
     public int batchSendSMS(final List<SmsBody> smsBodyList){
-        if(smsBodyList.isEmpty())return 0;
+        if(smsBodyList.isEmpty()||smsBodyList.size()>100)return 0;
 
         int limit=deductSMS(smsBodyList.get(0).getUserId(),smsBodyList.size());
         if(limit>0){
@@ -81,7 +81,7 @@ public class DataAccessServiceImpl implements DataAccessService {
                     return smsBodyList.size();
                 }
             }) ;
-            return limit;
+            return smsBodyList.size();
         }else {
             return 0;
         }

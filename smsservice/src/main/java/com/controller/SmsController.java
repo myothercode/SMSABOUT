@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,13 +52,11 @@ public class SmsController{
     /*登录**/
     @RequestMapping("/login/loginUser")
     public String loginUser(HttpServletRequest request,LoginVo loginVo){
+        //setSession(request);
         if(loginVo==null||loginVo.getUserId()==null||loginVo.getPassWord()==null)return "login";
         SessionVo sessionVo = dataAccessService.getLoginVo(loginVo);
         if(sessionVo==null||sessionVo.getId()==null||sessionVo.getId()==0)return "login";
-        HttpSession session = request.getSession(false);
-
-        /*SessionVo sessionVo =new SessionVo() ;
-        sessionVo.setId(88L);*/
+        HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_KEY,sessionVo);
         return "mainPage";
     }
@@ -166,9 +165,12 @@ public class SmsController{
     }
 
     /**第三方接口*/
-    @RequestMapping(value = "/sms/thirdPartImpl")
+    @RequestMapping(value = "/sms/thirdPartImpl",method = RequestMethod.POST)
     @ResponseBody
-    public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody,HttpServletRequest request){
+    public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody,
+                                HttpServletRequest request, HttpServletResponse response){
+        //setSession(request);
+
         if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
         if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
