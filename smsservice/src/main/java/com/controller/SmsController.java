@@ -168,7 +168,7 @@ public class SmsController{
     /**第三方接口*/
     @RequestMapping(value = "/sms/thirdPartImpl")
     @ResponseBody
-    public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody){
+    public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody,HttpServletRequest request){
         if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
         if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
@@ -184,7 +184,6 @@ public class SmsController{
                     SmsBody s=new SmsBody();
                     s.setServiceId("106289975");
                     s.setUserId(sessionVo.getId());
-                    //s.setUserId(888L);
                     s.setPhoneNo("86"+linText);
                     s.setMsg(thirdSmsBody.getMsg());
                     s.setReserve("000000");
@@ -193,7 +192,6 @@ public class SmsController{
                     SmsBody s=new SmsBody();
                     s.setServiceId("106289975");
                     s.setUserId(sessionVo.getId());
-                    //s.setUserId(888L);
                     s.setPhoneNo(linText);
                     s.setMsg(thirdSmsBody.getMsg());
                     s.setReserve("000000");
@@ -206,5 +204,16 @@ public class SmsController{
         return ii;
     }
 
+
+
+
+
+    /*测试用,设置session*/
+    public void setSession(HttpServletRequest request){
+        HttpSession session =  request.getSession();
+        SessionVo sessionVo =new SessionVo() ;
+        sessionVo.setId(88L);
+        session.setAttribute(SESSION_KEY,sessionVo);
+    }
 
 }
