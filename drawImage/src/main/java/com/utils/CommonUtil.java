@@ -2,6 +2,8 @@ package com.utils;
 
 import com.VO.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Weeks;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,24 +19,25 @@ import java.util.*;
  */
 public class CommonUtil {
 
-    /**计算两个日期之间相差几周(同一年)*/
+    /**joda计算指定日期指定周后的日期周一日期*/
+    public static Date getDateAfterWeek(Date date,int afterWeek){
+        DateTime dateTime=new DateTime(date);
+        DateTime then=dateTime.plusWeeks(afterWeek).dayOfWeek().withMinimumValue();
+        return then.toDate();
+    }
+
+    /**计算两个日期之间相差几周*/
     public static int getTwoDateWeekNum(Date date1,Date date2){
-        Calendar c = new GregorianCalendar();
+        int i= Weeks.weeksBetween(new DateTime(date1),new DateTime(date2)).getWeeks();
+        return i;
+        /*Calendar c = new GregorianCalendar();
         c.setFirstDayOfWeek(Calendar.MONDAY);
         c.setMinimalDaysInFirstWeek(7);
         c.setTime (date1);
         int before = c.get(Calendar.WEEK_OF_YEAR);  //得到指定日期所在年是第几周
         c.setTime(date2);
         int after = c.get(Calendar.WEEK_OF_YEAR);
-
-
-       /* Calendar before = getCalendar(date1);
-        Calendar after = getCalendar(date2);
-        before.setTime(turnToDateStart(date1));
-        after.setTime(turnToDateStart(date2));*/
-
-        //int week=before.
-        return after-before==0?1:(after-before);
+        return after-before==0?1:(after-before);*/
     }
 
     /**
@@ -43,20 +46,40 @@ public class CommonUtil {
      * @return
      */
     public static Date getFirstDayOfWeek(Date date) {
-        Calendar c = new GregorianCalendar();
+        DateTime dateTime=new DateTime(date);
+        return dateTime.dayOfWeek().withMinimumValue().toDate();
+        /*Calendar c = new GregorianCalendar();
         c.setFirstDayOfWeek(Calendar.MONDAY);
         c.setTime(date);
         c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
-        return c.getTime ();
+        return c.getTime ();*/
+    }
+
+    /**
+     * 得到指定日期所在周的最后一天
+     * @param date
+     * @return
+     */
+    public static Date getLastDayOfWeek(Date date){
+        DateTime dateTime=new DateTime(date);
+        return dateTime.dayOfWeek().withMaximumValue().toDate();
     }
 
     /** 时间转为当天 00:00:00 */
     public static Date turnToDateStart(Date date) {
-        Calendar calendar = getCalendar(date);
+        DateTime dateTime=new DateTime(date);
+        return dateTime.withTimeAtStartOfDay().toDate();
+
+        /*Calendar calendar = getCalendar(date);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
+        return calendar.getTime();*/
+    }
+    /**日期转为当天23:00:00*/
+    public static Date turnToDateEnd(Date date){
+        DateTime dateTime=new DateTime(date);
+        return  dateTime.withTime(23,59,59,0).toDate();
     }
 
     /** 时间转指定格式的字符串 yyyy-MM-dd HH:mm:ss*/
