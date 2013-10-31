@@ -1,17 +1,12 @@
 package com.utils;
 
-import com.VO.ComparatorPulse;
-import com.VO.ComparatorTemperature;
-import com.VO.PulseVO;
-import com.VO.TemperatureVO;
+import com.VO.*;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +16,90 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class CommonUtil {
-    /*将时间转为对应的时间点*/
+
+    /**计算两个日期之间相差几周(同一年)*/
+    public static int getTwoDateWeekNum(Date date1,Date date2){
+        Calendar c = new GregorianCalendar();
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.setMinimalDaysInFirstWeek(7);
+        c.setTime (date1);
+        int before = c.get(Calendar.WEEK_OF_YEAR);  //得到指定日期所在年是第几周
+        c.setTime(date2);
+        int after = c.get(Calendar.WEEK_OF_YEAR);
+
+
+       /* Calendar before = getCalendar(date1);
+        Calendar after = getCalendar(date2);
+        before.setTime(turnToDateStart(date1));
+        after.setTime(turnToDateStart(date2));*/
+
+        //int week=before.
+        return after-before==0?1:(after-before);
+    }
+
+    /**
+     * 计算指定日期所在周的第一天
+     * @param date
+     * @return
+     */
+    public static Date getFirstDayOfWeek(Date date) {
+        Calendar c = new GregorianCalendar();
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
+        return c.getTime ();
+    }
+
+    /** 时间转为当天 00:00:00 */
+    public static Date turnToDateStart(Date date) {
+        Calendar calendar = getCalendar(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /** 时间转指定格式的字符串 yyyy-MM-dd HH:mm:ss*/
+    public static String date2String(Date date, String pattern) {
+        return DateFormatUtils.format(date, pattern, Locale.CHINA);
+    }
+    public static String date2StringFull(Date date) {
+        return DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    }
+    public static String date2StringYMD(Date date) {
+        return DateFormatUtils.format(date, "yyyy-MM-dd", Locale.CHINA);
+    }
+
+    /**
+     *字符串转时间
+     * @param dateStr
+     * @return
+     * @throws ParseException
+     */
+    public static Date str2Date(String dateStr) throws ParseException {
+        return dateTimeFormatThreadLocal.get().parse(dateStr);
+    }
+
+    private static final ThreadLocal<Calendar> calendarThreadLocal = new ThreadLocal<Calendar>() {
+        @Override
+        protected Calendar initialValue() {
+            return Calendar.getInstance(Locale.CHINA);
+        }
+    };
+    private static final ThreadLocal<DateFormat> dateTimeFormatThreadLocal = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+    };
+    private static Calendar getCalendar(Date date) {
+        Calendar calendar = calendarThreadLocal.get();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+
+    /**将时间转为对应的时间点*/
     public static int time2point(Date date){
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(date);
@@ -40,24 +118,15 @@ public class CommonUtil {
        }else if (h>=22){
            p=6;
        }
-
         return p;
     }
-
-
-
-    /*字符串转时间*/
-    public static Date str2Date(String dateStr) throws ParseException {
-        return dateTimeFormatThreadLocal.get().parse(dateStr);
+    /**提取日期里面的小时数字，用于当时间点相同的时候进行排序*/
+    public static int getDateHour(Date date){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        int h= calendar.get(Calendar.HOUR_OF_DAY);
+        return h;
     }
-
-    private static final ThreadLocal<DateFormat> dateTimeFormatThreadLocal = new ThreadLocal<DateFormat>() {
-        @Override
-        protected DateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
-
 
     /*将体温集合提取出xy坐标集合*/
     public static Object[] cover2Arr(List list){
@@ -90,5 +159,50 @@ public class CommonUtil {
         Object[] o=new Object[]{xs,ys};
         return o;
     }
+
+    /**对呼吸集合进行排序和索引标记(一天之内一个时间段一次)*/
+    public static void sortListByTimePoint(List<BreathVO> breathVOList){
+        ComparatorBreath comparatorBreath=new ComparatorBreath();
+        Collections.sort(breathVOList,comparatorBreath);
+        for (int i=0;i<breathVOList.size();i++){
+            BreathVO breathVO= breathVOList.get(i);
+            if(breathVO.getPoint()==1){breathVO.setIndex(2);}else {
+                if (breathVO.getPoint()%2==0){breathVO.setIndex(3);}else {
+                    breathVO.setIndex(2);
+                }
+            }
+        }
+    }
+
+    /**对呼吸集合，时间点相同的元素进行索引标记(一天之内，一个时间点多次)*/
+    public static List<BreathVO> sortListByTimePoint1(List<BreathVO> breathVOList){
+        Map map=new HashMap();
+        List<BreathVO> breathVOList1=new ArrayList<BreathVO>();
+        /*先进行遍历，找出有哪些时间点，并累计时间点的个数*/
+        for (BreathVO breathVO : breathVOList){
+           if(map.containsKey(breathVO.getPoint())){
+               List<BreathVO> breathVOs= (List<BreathVO>) map.get(breathVO.getPoint());
+               breathVOs.add(breathVO);
+           }else {
+               List<BreathVO> breathVOs=new ArrayList<BreathVO>();
+               breathVOs.add(breathVO);
+               map.put(breathVO.getPoint(),breathVOs);
+           }
+        }
+        /*遍历map，并对mmap集合进行排序*/
+        Set key=map.keySet();
+        for (Iterator iterator=key.iterator();iterator.hasNext();){
+            List<BreathVO> breathVOs = (List<BreathVO>) map.get(iterator.next());
+            ComparatorBreath comparatorBreath=new ComparatorBreath();
+            Collections.sort(breathVOs,comparatorBreath);
+            for (int i=0;i<breathVOs.size();i++){
+                BreathVO breathVO= breathVOs.get(i);
+                breathVO.setIndex(i+1);
+            }
+            breathVOList1.addAll(breathVOs);
+        }
+        return breathVOList1;
+    }
+
 
 }

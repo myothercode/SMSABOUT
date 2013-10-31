@@ -1,5 +1,7 @@
 package com;
 
+import com.VO.BreathVO;
+import com.VO.CommonStringVO;
 import com.VO.PulseVO;
 import com.VO.TemperatureVO;
 import com.utils.CommonUtil;
@@ -25,7 +27,7 @@ public class ImgMain {
     public Graphics2D graphics;
     /**初始化*/
     public void init(){
-        int width=750,height=800;
+        int width=750,height=1000;
         image=new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
         graphics=(Graphics2D)image.getGraphics();
         graphics.setBackground(Color.WHITE);
@@ -96,9 +98,41 @@ public class ImgMain {
         PulseVO3.setPulse(50);
         list1.add(PulseVO3);
 
+        //==呼吸频率
+        BreathVO breathVO=new BreathVO();
+        breathVO.setBreath(80);
+        breathVO.setDate(CommonUtil.str2Date("2013-10-30 11:25:25"));
+        BreathVO breathVO1=new BreathVO();
+        breathVO1.setBreath(90);
+        breathVO1.setDate(CommonUtil.str2Date("2013-10-30 6:25:25"));
+        BreathVO breathVO2=new BreathVO();
+        breathVO2.setBreath(20);
+        breathVO2.setDate(CommonUtil.str2Date("2013-10-30 2:25:25"));
 
+        java.util.List<BreathVO> list2=new ArrayList<BreathVO>();
+        list2.add(breathVO);
+        list2.add(breathVO1);
+        list2.add(breathVO2);
 
+        java.util.List<CommonStringVO> list5=new ArrayList<CommonStringVO>();
+        CommonStringVO commonStringVO=new CommonStringVO();
+        commonStringVO.setValString("20/52");
+        commonStringVO.setDate(CommonUtil.str2Date("2013-10-30 2:25:25"));
+        CommonStringVO commonStringVO1=new CommonStringVO();
+        commonStringVO1.setValString("45/52");
+        commonStringVO1.setDate(CommonUtil.str2Date("2013-10-30 20:25:25"));
+        list5.add(commonStringVO1);
+        list5.add(commonStringVO) ;
 
+        java.util.List<CommonStringVO> list6=new ArrayList<CommonStringVO>();
+        CommonStringVO commonStringVO6=new CommonStringVO();
+        commonStringVO6.setValString("kkkkkk");
+        commonStringVO6.setDate(CommonUtil.str2Date("2013-10-30 20:25:25"));
+        list6.add(commonStringVO6);
+
+        imgBackLine.writeOther(3,list6,"tz");
+        imgBackLine.writeBloodPressure(5,list5);
+        imgBackLine.writeBreathString(3,list2);
         imgBackLine.drawTWPoint(2,list);  //画体温刻度，参数为周几，以及当天的检查情况
         imgBackLine.drawMBPoint(3,list1);
 

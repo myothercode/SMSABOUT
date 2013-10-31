@@ -23,6 +23,7 @@ public class ImgPoint extends ImgDrawString {
 
     /*脉搏线*/
     public void drawMBPoint(int week,java.util.List<PulseVO> tempList) throws IOException {
+        if(tempList.isEmpty())return;;
         /*15像素表示4次
         * 例如180次 (180-165)/4=?格*/
         int dayx=93+(6*15)*(week-1);
@@ -40,7 +41,7 @@ public class ImgPoint extends ImgDrawString {
 
     /*体温点线*/
     public void drawTWPoint(int week,java.util.List<TemperatureVO> tempList) throws IOException {
-
+         if(tempList.isEmpty())return;
         /*
         *第一个刻度所在的坐标为93,187
          * 15像素表示0.2度

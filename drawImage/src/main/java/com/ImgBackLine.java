@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 /**画背景线*/
 public class ImgBackLine extends ImgMain {
-    /*画出XY*/
+    /**画出XY*/
     public void drawLine() throws IOException {
         init();
         Line2D lineY=new Line2D.Double(92,155,92,785);//Y轴
@@ -25,17 +25,89 @@ public class ImgBackLine extends ImgMain {
         Line2D lineX2=new Line2D.Double(0,785,750,785); //地步X轴
         drawXlineB(lineX2,Color.BLACK);
 
-
         graphics.draw(lineY);
         graphics.draw(lineTitle);
         graphics.draw(lineTime);
         drawXline();
         drawYline();
+
+        drawTitleTable();
+        breathLine();
+        bloodPressureLine();
+        drawOtherLine();
+    }
+
+    /**画出其它入量出量等线条*/
+    private void drawOtherLine(){
+        double xx1=0,yx1=845,xx2=720,yx2=845; //横线
+        double xy1=92,yy1=845,xy2=92,yy2=920; //竖线
+        Line2D lineX;
+        for (int i=0;i<=4;i++){
+            yx1+=15;
+            yx2+=15;
+            lineX=new Line2D.Double(xx1,yx1,xx2,yx2);
+            graphics.draw(lineX);
+        }
+
+        Line2D lineY;
+        for (int i=0;i<8;i++){
+            lineY =new Line2D.Double(xy1,yy1,xy2,yy2) ;
+            graphics.draw(lineY);
+            xy1+=90;
+            xy2+=90;
+        }
+    }
+
+    /**血压线*/
+    private void bloodPressureLine(){
+        Line2D lineX=new Line2D.Double(0,845,720,845);
+        graphics.draw(lineX);
+
+        Line2D linY;
+        double xy1=92,yy1=830,xy2=92,yy2=845; //竖线
+        for(int i=0;i<=14;i++){
+            linY=new Line2D.Double(xy1,yy1,xy2,yy2);
+            graphics.draw(linY);
+            xy1+=45;
+            xy2+=45;
+        }
+
+    }
+
+    /**呼吸频率线*/
+    private void  breathLine(){
+        Line2D lineX=new Line2D.Double(0,830,720,830);
+        graphics.draw(lineX);
+
+        Line2D linY;
+        double xy1=92,yy1=785,xy2=92,yy2=830; //竖线
+        for (int i=0;i<=42;i++){
+            linY=new Line2D.Double(xy1,yy1,xy2,yy2);
+            graphics.draw(linY);
+            xy1+=15;
+            xy2+=15;
+        }
+
     }
 
     /*画出前三行标题行*/
     private void drawTitleTable(){
-
+        double xx1=0,yx1=155,xx2=720,yx2=155; //横线
+        double xy1=92,yy1=110,xy2=92,yy2=155; //竖线
+        Line2D lineX;
+        for (int i=1;i<=3;i++) {
+            yx1-=15;
+            yx2-=15;
+            lineX =new Line2D.Double(xx1,yx1,xx2,yx2) ;
+            graphics.draw(lineX);
+        }
+        Line2D lineY;
+        for (int i=0;i<8;i++){
+        lineY =new Line2D.Double(xy1,yy1,xy2,yy2) ;
+        graphics.draw(lineY);
+        xy1+=90;
+        xy2+=90;
+        }
     }
 
     /*竖向画线*/
