@@ -93,48 +93,11 @@ public class ImgDrawString extends ImgBackLine {
         int[] i=(int[])map.get(type);
         String v= commonStringVOList.get(0).getValString();
         graphics.drawString(v,i[0],i[1]);
+
+
     }
 
-    /**填写日期
-     *
-     * @param inHosDate  入院日期 r
-     * @param weekNum    第几周 d
-     */
-    public void writeWeekDates(Date inHosDate,int weekNum){
-            Date d=CommonUtil.getDateAfterWeek(inHosDate,weekNum-1);
-            Map<Integer,Date> days=CommonUtil.getDasInWeek(d);
-        int i1=1;
-        for (int i=1;i<=7;i++){
-            graphics.drawString(CommonUtil.date2StringYMD(days.get(i)),93+(6*15)*(i1-1),122);
-            i1++;
-        }
-    }
-
-    /**填写住院天数*/
-    public void writeInHospDays(Date inHosDate,int weekNum){
-        int firstWeekLastDayNum=0;//第一周最后一天是住院的第几天
-         if(weekNum==1){
-             int d=CommonUtil.getNumDayInWeek(inHosDate);//的搭配入院日期在本周是第几天
-             firstWeekLastDayNum=7-d+1;
-             for (int i=1;i<=firstWeekLastDayNum;i++){
-                 int dayx=93+(6*15)*(d-1);
-                 graphics.drawString(String.valueOf(i),dayx,138);
-                 d++;
-             }
-
-         }else {
-             int d=1;
-             firstWeekLastDayNum=(7-CommonUtil.getNumDayInWeek(inHosDate)+1)+((weekNum-2)*7);
-             for (int i=1;i<=7;i++){
-                 int dayx=93+(6*15)*(d-1);
-                 graphics.drawString(String.valueOf(i+firstWeekLastDayNum),dayx,138);
-                 d++;
-             }
-             firstWeekLastDayNum+=7;
-         }
-    }
-
-    /**填写血压(week是当周的第几天)*/
+    /**填写血压*/
     public void writeBloodPressure(int week,java.util.List<CommonStringVO> bloodPressureVOList){
           if (bloodPressureVOList.isEmpty())return;
         int dayx=93+(6*15)*(week-1);

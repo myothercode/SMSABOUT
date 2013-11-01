@@ -26,18 +26,6 @@ public class CommonUtil {
         return then.toDate();
     }
 
-    /**获取指定日期所在周的七天日期map*/
-    public static Map<Integer,Date> getDasInWeek(Date date){
-        Date d=getFirstDayOfWeek(date);
-        DateTime dateTime=new DateTime(d);
-        Map<Integer,Date> map=new HashMap<Integer,Date>();
-        for (int i=0;i<7;i++){
-           Date dw = dateTime.plusDays(i).toDate();
-            map.put(i+1,dw);
-        }
-        return map;
-    }
-
     /**计算两个日期之间相差几周*/
     public static int getTwoDateWeekNum(Date date1,Date date2){
         int i= Weeks.weeksBetween(new DateTime(date1),new DateTime(date2)).getWeeks();
@@ -50,12 +38,6 @@ public class CommonUtil {
         c.setTime(date2);
         int after = c.get(Calendar.WEEK_OF_YEAR);
         return after-before==0?1:(after-before);*/
-    }
-
-    /**得到指定日期在所在周是第几天*/
-    public static int getNumDayInWeek(Date date){
-          DateTime dateTime=new DateTime(date);
-        return dateTime.dayOfWeek().get();
     }
 
     /**
@@ -100,21 +82,6 @@ public class CommonUtil {
         return  dateTime.withTime(23,59,59,0).toDate();
     }
 
-    /**比较两个日期的大小，返回结果为第一个日期比第二个日期大或者小.  -1 0 1*/
-    public static int comparTwoDate(Date date1,Date date2){
-        DateTime dateTime1=new DateTime(turnToDateStart(date1));
-        DateTime dateTime2=new DateTime(turnToDateStart(date2));
-        if(dateTime1.isAfter(dateTime2)){
-            return 1;
-        } else if (dateTime1.isBefore(dateTime2)){
-            return -1;
-        }else {
-            /*判断两个日期相等*/
-            //dateTime1.isEqual(dateTime2);
-            return 0;
-        }
-    }
-
     /** 时间转指定格式的字符串 yyyy-MM-dd HH:mm:ss*/
     public static String date2String(Date date, String pattern) {
         return DateFormatUtils.format(date, pattern, Locale.CHINA);
@@ -154,30 +121,6 @@ public class CommonUtil {
         return calendar;
     }
 
-    /**判断一个List<int[]>是否包含某个int[] */
-    public static boolean intsIsInListints(List<int[]> list,int[] ints){
-       Iterator iterator=list.iterator();
-        boolean res=false;
-        while (iterator.hasNext()){
-            int[] ints1=(int[])iterator.next();
-           if(ints.length != ints1.length){continue;};
-           if(compar2Arr(ints1,ints)){
-               res=true;
-               break;
-           }else {continue;}
-        }
-        return res;
-    }
-    private static boolean compar2Arr(int[] i1,int[] i2){
-         boolean m=true;
-        for (int i=0;i<i1.length;i++){
-            if(i1[i]!=i2[i]){
-                m=false;
-                break;
-            }
-        }
-        return m;
-    }
 
     /**将时间转为对应的时间点*/
     public static int time2point(Date date){

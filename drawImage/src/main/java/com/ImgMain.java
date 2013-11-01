@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,15 +44,6 @@ public class ImgMain {
         ImageIO.write(image, type, new File(filePath));
         image.flush();
         //outImage("png","d:/test.png");
-
-        /*ServletOutputStream sos = response.getOutputStream();
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(sos);
-        encoder.encode(image);*/
-
-
-
-
-
     }
 
 
@@ -61,8 +51,6 @@ public class ImgMain {
         ImgPoint imgBackLine=new ImgPoint();
         imgBackLine.drawLine();//画出背景线
         imgBackLine.writeScaleValue();//画出刻度值
-        imgBackLine.writeWeekDates(CommonUtil.str2Date("2013-9-24 13:25:25"),2);     //写出日期
-        imgBackLine.writeInHospDays(CommonUtil.str2Date("2013-9-24 13:25:25"),2);    //写出住院天数
 
 
 
@@ -145,15 +133,10 @@ public class ImgMain {
         imgBackLine.writeOther(3,list6,"tz");
         imgBackLine.writeBloodPressure(5,list5);
         imgBackLine.writeBreathString(3,list2);
-        imgBackLine.drawTWPoint(3,list);  //画体温刻度，参数为周几，以及当天的检查情况
+        imgBackLine.drawTWPoint(2,list);  //画体温刻度，参数为周几，以及当天的检查情况
         imgBackLine.drawMBPoint(3,list1);
-        imgBackLine.drawTWPoint(4,list);
-        imgBackLine.drawMBPoint(4,list1);
 
 
-        imgBackLine.outImage("png", "d:/test.png");
+
     }
 }
-
-
-

@@ -3,15 +3,14 @@ package com;
 import com.VO.ComparatorTemperature;
 import com.VO.PulseVO;
 import com.VO.TemperatureVO;
-import com.sun.org.apache.xpath.internal.axes.WalkingIteratorSorted;
 import com.utils.CommonUtil;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
-import java.util.List;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,12 +20,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ImgPoint extends ImgDrawString {
-    private ThreadLocal<java.util.List> iList;
 
     /*脉搏线*/
     public void drawMBPoint(int week,java.util.List<PulseVO> tempList) throws IOException {
-        if(tempList.isEmpty())return;
-        List list=iList.get();
+        if(tempList.isEmpty())return;;
         /*15像素表示4次
         * 例如180次 (180-165)/4=?格*/
         int dayx=93+(6*15)*(week-1);
@@ -35,22 +32,16 @@ public class ImgPoint extends ImgDrawString {
             int[] xy= getCoordinateMB(dayx, temperatureVO.getPoint(), temperatureVO.getPulse());
             temperatureVO.setX(xy[0]);
             temperatureVO.setY(xy[1]);
-            if(CommonUtil.intsIsInListints(list,xy)){//判断有没有重叠的
-                drawEllipse(Color.RED, xy[0]+2, xy[1]-13, 10, 10);
-            }else {
             drawMarkString(Color.RED,xy[0],xy[1],"●");
-            }
         }
         Object[] objects=CommonUtil.cover2ArrMB(tempList);
         drawPolyLine((int[])objects[0],(int[])objects[1],tempList.size(),Color.RED);
-        iList.remove();
+        outImage("png", "d:/test.png");
      }
 
     /*体温点线*/
     public void drawTWPoint(int week,java.util.List<TemperatureVO> tempList) throws IOException {
          if(tempList.isEmpty())return;
-        iList=new ThreadLocal<java.util.List>()    ;
-        java.util.List list=new ArrayList();
         /*
         *第一个刻度所在的坐标为93,187
          * 15像素表示0.2度
@@ -62,13 +53,11 @@ public class ImgPoint extends ImgDrawString {
         for(TemperatureVO temperatureVO:tempList){
             temperatureVO.setPoint(CommonUtil.time2point(temperatureVO.getDate()));
             int[] xy= getCoordinate(dayx,temperatureVO.getPoint(),temperatureVO.getTemperature());
-             list.add(xy) ;
             //drawEllipse(Color.RED,xy[0],xy[1],10,10);
             temperatureVO.setX(xy[0]);
             temperatureVO.setY(xy[1]);
             drawMarkString(Color.BLUE,xy[0],xy[1],"×");
         }
-        iList.set(list);
         Object[] objects=CommonUtil.cover2Arr(tempList);
         drawPolyLine((int[])objects[0],(int[])objects[1],tempList.size(),Color.BLUE);
 
@@ -116,12 +105,12 @@ public class ImgPoint extends ImgDrawString {
         graphics.setFont(f);
     }
 
-    /*画圆 不填充*/
+    /*画圆*/
     private void drawEllipse(Color color,int x,int y,int w,int h){
         graphics.setColor(color);
         Ellipse2D ellipse2D=new Ellipse2D.Double(x,y,w,h);
         graphics.draw(ellipse2D);
-        //graphics.fill(ellipse2D);
+        graphics.fill(ellipse2D);
         graphics.setColor(Color.BLACK);
     }
 }
