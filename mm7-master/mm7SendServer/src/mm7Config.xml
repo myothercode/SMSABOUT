@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<vasp:MM7Config xmlns:vasp="http://mms.chinamobile.com/mm7ConfigSchema">
+	<AuthenticationMode>0</AuthenticationMode>
+	<UserName></UserName>
+	<Password></Password>
+	<MaxMessageSize>200000</MaxMessageSize>
+	<LogPath>e:\vas_log</LogPath>
+	<logLevel>1</logLevel>
+	<LogNum>100</LogNum>
+	<LogInterval>120</LogInterval>
+	<LogSize>200</LogSize>
+	<Charset>UTF-8</Charset>
+	<MmscID>1</MmscID>
+	<mmscURL>/MMSG/services/MM7AOMT</mmscURL>
+	<mmscIP>119.6.251.96</mmscIP>	
+	<UseSSL>false</UseSSL>
+	<ListenIP>0.0.0.0</ListenIP>
+	<ListenPort>8080</ListenPort>
+	<BackLog>50</BackLog>
+	<TimeOut>10000</TimeOut>
+	<ReSendCount>5</ReSendCount>	
+</vasp:MM7Config>
+
+
+        <!--一些地方需要进行修改，下面一一说明：
+<AuthenticationMode>1</AuthenticationMode>
+        表示VASP作为服务端接收消息时是否进行鉴权或进行什么样的鉴权，0表示不鉴权，1表示进行基本鉴权，2表示进行摘要鉴权。
+<UserName>zxme</UserName>
+<Password>zxme</Password>
+        表示彩信中心对VASP进行鉴权时的用户名和密码，同时也是VASP对接入的彩信中心进行鉴权时用户名和密码，是双向的，要VASP和MMSC双方进行约定。
+<LogPath>c:\vas_log</LogPath>
+        表示日志存放的路径，在Windows操作系统下和Linux下是不一样的，要注意进行修改。
+<MmscID>1</MmscID>
+        表示MMSC网关的序号，需要从MMSC处得到。
+<mmscURL> /mm7</mmscURL>
+<mmscIP>192.120.231.180</mmscIP>
+        分别表示MMSC网关的URL地址和IP（或主机名），也需要MMSC处得到。这里也可以填成ip:port。例如：192.120.231.180:8080,不填端口号使用默认端口号80。
+<ListenIP>192.120.231.228</ListenIP>
+<ListenPort>80</ListenPort>
+        表示当VASP用应用程序方式进行接收消息时的监听地址和端口号。
+        以上为这个配置文件中主要需要注意修改的地方，当然其他的内容也可以进行修改，如<logLevel>1</logLevel>可以根据需要进行修改，0表示不产生日志；1表示产生错误日志；3表示产生信息日志；6表示产生完整信息日志。
+
+<TimeOut>90000</TimeOut>
+        表示设置发送的超时时间，若发送超过这个时间，则自动进行重新发送。
+<ReSendCount>2</ReSendCount>
+        表示设置重发的次数，建议在3次以下，一般用2次即可。-->
