@@ -3,9 +3,9 @@ package cn.common;
 
 /**
 * @ClassName: JDBCHandler
-* @Description: TODO(JDBC杈呭姪宸ュ叿)
+* @Description: TODO(JDBC辅助工具)
 * @author guopeng
-* @date 2012-2-24 涓婂崍11:15:39
+* @date 2012-2-24 上午11:15:39
 * 
 */
 public abstract class JDBCHandler {
@@ -16,17 +16,17 @@ public abstract class JDBCHandler {
 	
 	/**
 	* @Title: execute
-	* @Description: TODO(鐢ㄤ簬鎵цJDBC鎿嶄綔)
+	* @Description: TODO(用于执行JDBC操作)
 	* @param @return
-	* @param @throws Exception?璁惧畾鏂囦欢
-	* @return Object?杩斿洖绫诲瀷
+	* @param @throws Exception设定文件
+	* @return Object返回类型
 	* @throws
 	*/
 	public Object execute() throws Exception {
 		try {
-			conn = SQLFactory.getConnection();
-			return doExecute();
-		} catch (Exception e) {
+            conn=SQLFactory.getConnection();
+            return doExecute();
+        } catch (Exception e) {
 			try {
 				if (rs != null)
 					rs.close();
@@ -50,10 +50,10 @@ public abstract class JDBCHandler {
 	 * @throws Exception TODO
 	 * @throws Exception 
 	* @Title: doExecute
-	* @Description: TODO(JDBC閫昏緫)
+	* @Description: TODO(JDBC逻辑)
 	* @param @return
-	* @param @throws Exception?璁惧畾鏂囦欢
-	* @return Object?杩斿洖绫诲瀷
+	* @param @throws Exception?设定文件
+	* @return Object?返回类型
 	* @throws
 	*/
 	public abstract Object doExecute() throws Exception;

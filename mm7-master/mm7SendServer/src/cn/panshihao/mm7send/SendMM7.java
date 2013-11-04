@@ -70,7 +70,7 @@ public class SendMM7 {
 		submitReq.addTo("18602861176");
 		
 		// 目前不需要状态报告
-		submitReq.setDeliveryReport(false);
+		submitReq.setDeliveryReport(true);
 		// 设置彩信主题
 		submitReq.setSubject(subject);
 		
@@ -125,6 +125,10 @@ public class SendMM7 {
 					fileContent.setContentType(MMConstants.ContentType.PNG);
 					fileContent.setContentID((i+1)+".png");
 				}
+                else if("jpg".equals(fileSuffix.toLowerCase())){
+                    fileContent.setContentType(MMConstants.ContentType.JPEG);
+                    fileContent.setContentID((i+1)+".jpg");
+                }
 				content.addSubContent(fileContent);
 			}
 		}

@@ -8,10 +8,10 @@ package cn.panshihao.mm7send;
 public class SPINFO {
 
 	public static final String MM7_TransactionID = "100001";
-	public static final String MM7_VASPID = "71320";
-	public static final String MM7_VASID = "1062897";
-	public static final String MM7_ServiceCode = "3181213802";
-	public static final String MM7_SenderAddress = "10628974";
+	public static final String MM7_VASPID = "";
+	public static final String MM7_VASID = "";
+	public static final String MM7_ServiceCode = "";
+	public static final String MM7_SenderAddress = "";
 	
 	public static final long SGIP_NODEID = 3028071565l;
 	public static final String SGIP_NAME = "10628973";

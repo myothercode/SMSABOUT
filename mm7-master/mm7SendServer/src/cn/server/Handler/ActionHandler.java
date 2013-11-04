@@ -378,13 +378,13 @@ public class ActionHandler {
 				}
 			}
 			//发送定制号码
-			sendMM7 = new SendMM7(customNumberList, contentList, subject);
+			/*sendMM7 = new SendMM7(customNumberList, contentList, subject);
 			if(sendMM7.send(request.getSession().getServletContext())==true){
 				bool = true;
 				successCount = successCount+customNumberList.size();
 			}else{
 				failCount = failCount+customNumberList.size();
-			}
+			}*/
 			
 			
 			if(bool){

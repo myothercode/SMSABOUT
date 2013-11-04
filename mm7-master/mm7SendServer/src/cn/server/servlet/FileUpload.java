@@ -1,26 +1,20 @@
 package cn.server.servlet;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import cn.common.MD5Code;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.json.JSONObject;
-
-import cn.common.MD5Code;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 
 
@@ -58,12 +52,13 @@ public class FileUpload extends HttpServlet {
 		// 设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
 		factory.setSizeThreshold(1024 * 1024);
 
+        boolean isUpload = ServletFileUpload.isMultipartContent(request);
 		// 高水平的API文件上传处理
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
 		try {
 			// 可以上传多个文件
-			List<FileItem> list = (List<FileItem>) upload.parseRequest((RequestContext) request);
+			List<FileItem> list = (List<FileItem>) upload.parseRequest(request);
 
 			for (FileItem item : list) {
 				// 获取表单的属性名字

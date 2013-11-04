@@ -12,7 +12,6 @@ import java.util.Properties;
 public class SQLFactory {
 
 	private static ComboPooledDataSource ds = null;
-	
 	private static String url = "jdbc:mysql://localhost:3306/mm7?useUnicode=true&characterEncoding=UTF-8";
 	private static String user = "root";
 	private static String pass = "root";
@@ -39,7 +38,7 @@ public class SQLFactory {
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		}
-		System.out.println("è®¾ç½®è¿žæŽ¥è¶…æ—¶æ—¶é—´ï¼š" + timeout);
+		System.out.println("ÉèÖÃÁ¬½Ó³¬Ê±Ê±¼ä£º" + timeout);
 		ds.setJdbcUrl(url);
 		ds.setUser(user);
 		ds.setPassword(pass);
