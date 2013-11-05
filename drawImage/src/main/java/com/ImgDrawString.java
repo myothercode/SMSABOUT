@@ -63,6 +63,18 @@ public class ImgDrawString extends ImgBackLine {
         graphics.drawString("住院天数",5,138);
         /*===========时间==========================================*/
         graphics.drawString("日   期",5,122);
+
+        /*标题*/
+        drawBigFont("姓名：",5,106,12);
+        drawBigFont("年龄：",92-10,106,12);
+        drawBigFont("性别：",182-30,106,12);
+        drawBigFont("科别：",272-50,106,12);
+        drawBigFont("床号：",390-50,106,12);
+        drawBigFont("入院日期：",420,106,12);
+        drawBigFont("住院病历号：",550,106,12);
+        drawBigFont("体 温 单",280,70,22);
+
+
         /*===========呼吸==============================================*/
         graphics.drawString("呼吸(次/分)",5,815);
         /*===============血压=========================================*/
@@ -190,4 +202,13 @@ public class ImgDrawString extends ImgBackLine {
         graphics.setColor(Color.BLACK);
     }
 
+    /*设置大字号*/
+    private void drawBigFont(String st,int x,int y,int size){
+        Font f= graphics.getFont();
+        //graphics.setColor(color);
+        graphics.setFont(new Font("宋体", Font.BOLD, size));
+        graphics.drawString(st,x,y);
+        //graphics.setColor(Color.BLACK);
+        graphics.setFont(f);
+    }
 }

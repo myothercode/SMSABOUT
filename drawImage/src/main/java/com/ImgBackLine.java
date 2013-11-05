@@ -17,12 +17,12 @@ public class ImgBackLine extends ImgMain {
     public void drawLine() throws IOException {
         init();
         Line2D lineY=new Line2D.Double(92,155,92,785);//Y轴
-        Line2D lineTitle=new Line2D.Double(0,170,750,170);//脉搏体温标题线
-        Line2D lineTime=new Line2D.Double(0,155,750,155);//时间线
+        Line2D lineTitle=new Line2D.Double(0,170,720,170);//脉搏体温标题线
+        Line2D lineTime=new Line2D.Double(0,155,720,155);//时间线
 
-        Line2D lineX=new Line2D.Double(0,185,750,185); //顶层X轴
+        Line2D lineX=new Line2D.Double(0,185,720,185); //顶层X轴
         drawXlineB(lineX,Color.BLACK);
-        Line2D lineX2=new Line2D.Double(0,785,750,785); //地步X轴
+        Line2D lineX2=new Line2D.Double(0,785,720,785); //地步X轴
         drawXlineB(lineX2,Color.BLACK);
 
         graphics.draw(lineY);

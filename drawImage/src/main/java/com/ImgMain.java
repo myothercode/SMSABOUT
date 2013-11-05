@@ -10,6 +10,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.CropImageFilter;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,14 +44,18 @@ public class ImgMain {
 
     /**输出图片*/
     public void outImage(String type,String filePath) throws IOException {
+        /*裁剪图片，将图片顶部空白裁掉*/
+        ImageFilter cropFilter = new CropImageFilter(0,48,750,900);
+        Image img = Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(image.getSource(), cropFilter));
+        BufferedImage tag = new BufferedImage(750,900, BufferedImage.TYPE_INT_RGB);
+        Graphics g = tag.getGraphics();
+        g.drawImage(img, 0, 0, null); // 绘制小图
+        g.dispose();
         graphics.dispose();
-        ImageIO.write(image, type, new File(filePath));
+        //ImageIO.write(image, type, new File(filePath));
+        ImageIO.write(tag, type, new File(filePath));
         image.flush();
-        //outImage("png","d:/test.png");
 
-        /*ServletOutputStream sos = response.getOutputStream();
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(sos);
-        encoder.encode(image);*/
 
 
 
@@ -66,24 +73,28 @@ public class ImgMain {
 
 
 
-        java.util.List<TemperatureVO> list=new ArrayList<TemperatureVO>();
+        List<TemperatureVO> list=new ArrayList<TemperatureVO>();
         TemperatureVO temperatureVO=new TemperatureVO();
         temperatureVO.setDate(CommonUtil.str2Date("2013-10-30 13:25:25"));
+        temperatureVO.setTemperatureType("2");
         temperatureVO.setTemperature(35.5f);
         list.add(temperatureVO);
 
         TemperatureVO temperatureVO2=new TemperatureVO();
         temperatureVO2.setDate(CommonUtil.str2Date("2013-10-30 22:25:25"));
+        temperatureVO2.setTemperatureType("2");
         temperatureVO2.setTemperature(36.5f);
         list.add(temperatureVO2);
 
         TemperatureVO temperatureVO3=new TemperatureVO();
         temperatureVO3.setDate(CommonUtil.str2Date("2013-10-30 18:25:25"));
+        temperatureVO3.setTemperatureType("2");
         temperatureVO3.setTemperature(37.5f);
         list.add(temperatureVO3);
 
         TemperatureVO temperatureVO4=new TemperatureVO();
         temperatureVO4.setDate(CommonUtil.str2Date("2013-10-30 8:25:25"));
+        temperatureVO4.setTemperatureType("2");
         temperatureVO4.setTemperature(39.5f);
         list.add(temperatureVO4);
 

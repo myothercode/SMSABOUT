@@ -13,6 +13,7 @@ public class TemperatureVO {
     private float temperature;
     private Date date;
     private int point;
+    /**1口温 2,腋温 3,肛温*/
     private String temperatureType;
     private int x;
     private int y;

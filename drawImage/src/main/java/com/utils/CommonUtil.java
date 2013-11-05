@@ -220,8 +220,79 @@ public class CommonUtil {
             xs[i]=temperatureVO.getX()+7;
             ys[i]=temperatureVO.getY()-7;
         }
-        Object[] o=new Object[]{xs,ys};
+        Object[] o=needBreakpoint(new Object[]{xs,ys});
         return o;
+    }
+    /**根据坐标集合，判断是否有需要进行断点处理的，重新组装后返回list<int[]>*/
+    private static Object[] needBreakpoint(Object[] obs){
+        int[] xs=(int[])obs[0];
+        int[] ys=(int[])obs[1];
+        List<int[]> lix=new ArrayList<int[]>();
+        List<int[]> liy=new ArrayList<int[]>();
+        int[] xs1=new int[7];
+        int[] ys1=new int[7];
+        xs1[0]=xs[0];
+        ys1[0]=ys[0];
+        //lix.add(xs1);
+        //liy.add(ys1);
+        for(int i=1;i<xs.length;i++){
+            if(xs[i-1]!=xs[i]-15){
+                lix.add(xs1);
+                liy.add(ys1);
+                xs1=new int[7];
+                ys1=new int[7];
+                xs1[i]=xs[i];
+                ys1[i]=ys[i];
+                continue;
+            } else {
+                xs1[i]=xs[i];
+                ys1[i]=ys[i];
+                continue;
+            }
+
+        }
+        lix.add(xs1);
+        liy.add(ys1);
+        Object[] o=delRepeatArr(new Object[]{lix,liy}) ;
+        return o;
+    }
+    private static Object[] delRepeatArr(Object[] obs){
+        List<int[]> xs=( List<int[]>)obs[0];
+        List<int[]> ys=( List<int[]>)obs[1];
+        List<int[]> xs1= new ArrayList<int[]>();
+        List<int[]> ys1= new ArrayList<int[]>();
+       for (int i=0;i<xs.size();i++){
+          // List<Integer> lx=arr2List((int[])xs.get(i));
+           List<Integer> tempX=new ArrayList<Integer>();
+           List<Integer> tempY=new ArrayList<Integer>();
+           for(int ii=0;ii<xs.get(i).length;ii++){
+               int xi=(xs.get(i))[ii];
+               if(xi!=0){
+                   tempX.add(xi);
+                   tempY.add(ys.get(i)[ii]);
+               }
+           }
+           xs1.add(list2Arr(tempX));
+           ys1.add(list2Arr(tempY));
+       }
+       return new Object[]{xs1,ys1};
+
+    }
+    /*将list转数组，为防止基本类型转换陷阱，进行深度转换*/
+    private static int[] list2Arr(List lint){
+        int[] ints=new int[lint.size()];
+        for (int i=0;i<lint.size();i++){
+            ints[i]=(Integer)lint.get(i);
+        }
+        return ints;
+    }
+    /*将数组转为list，为防止基本类型转换陷阱，进行深度转换*/
+    private List<Integer> arr2List(int[] ints){
+         List<Integer> l=new ArrayList();
+        for (int i:ints){
+            l.add(i);
+        }
+        return l;
     }
 
     /*将脉搏集合提取出xy坐标集合*/

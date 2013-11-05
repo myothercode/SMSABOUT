@@ -49,6 +49,10 @@ public class ImgPoint extends ImgDrawString {
     /*体温点线*/
     public void drawTWPoint(int week,java.util.List<TemperatureVO> tempList) throws IOException {
          if(tempList.isEmpty())return;
+        String yew="2";      //腋温 ×
+        String kw="1";       //口温●
+        String gw="3";       //肛温○
+
         iList=new ThreadLocal<java.util.List>()    ;
         java.util.List list=new ArrayList();
         /*
@@ -66,11 +70,25 @@ public class ImgPoint extends ImgDrawString {
             //drawEllipse(Color.RED,xy[0],xy[1],10,10);
             temperatureVO.setX(xy[0]);
             temperatureVO.setY(xy[1]);
-            drawMarkString(Color.BLUE,xy[0],xy[1],"×");
+            if(yew.equals(temperatureVO.getTemperatureType())){
+                drawMarkString(Color.BLUE,xy[0],xy[1],"×");
+            }else if(kw.equals(temperatureVO.getTemperatureType())){
+                drawMarkString(Color.BLUE,xy[0],xy[1],"●");
+            }else if(gw.equals(temperatureVO.getTemperatureType())){
+                drawMarkString(Color.BLUE,xy[0],xy[1],"○");
+            }
+
         }
         iList.set(list);
         Object[] objects=CommonUtil.cover2Arr(tempList);
-        drawPolyLine((int[])objects[0],(int[])objects[1],tempList.size(),Color.BLUE);
+        List<int[]> intListX=(List<int[]>)objects[0];
+        List<int[]> intListY=(List<int[]>)objects[1];
+         for (int i=0;i<intListX.size();i++){
+             int [] xxs=intListX.get(i);
+             int [] yys=intListY.get(i);
+             drawPolyLine(xxs,yys,xxs.length,Color.BLUE);
+         }
+
 
 
         //int h= CommonUtil.time2point(new Date()); //获取时间点
