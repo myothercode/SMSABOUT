@@ -1,3 +1,4 @@
+/*
 package com.common.utils;
 
 
@@ -14,11 +15,13 @@ import com.google.common.primitives.Ints;
 import java.util.*;
 import java.util.regex.Pattern;
 
+*/
 /**
  * 内部使用json工具
  *
  *
- */
+ *//*
+
 public class JsonUtils {
 
     public static <T> String toBrowserJson(T obj, List<String> includePropertyList) {
@@ -36,11 +39,13 @@ public class JsonUtils {
         return text;
     }
 
-    /**
+    */
+/**
      * 将对象转换为json字符串
      *
      * @param includeProperties 只转换特定的属性
-     */
+     *//*
+
     public static <T> String toInternalJson(T obj, String... includeProperties) {
         JSONSerializer jsonSerializer = new JSONSerializer();
         jsonSerializer.config(SerializerFeature.WriteNullBooleanAsFalse, true);
@@ -52,14 +57,18 @@ public class JsonUtils {
         return jsonSerializer.getWriter().toString();
     }
 
-    /** 将json字符串转换为对象 */
+    */
+/** 将json字符串转换为对象 *//*
+
     @SuppressWarnings("unchecked")
     public static <T> T toObject(String internalJson) {
         DefaultJSONParser jsonParser = new DefaultJSONParser(internalJson);
         return (T) jsonParser.parse();
     }
 
-    /** 计算一个字符串中的字符 . 的个数 */
+    */
+/** 计算一个字符串中的字符 . 的个数 *//*
+
     private static int countDot(String s) {
         if(s == null)
             return 0;
@@ -71,7 +80,9 @@ public class JsonUtils {
         return i;
     }
 
-    /** 用于实现过滤指定的字符串，当只有指定的字符串模式被满足时，相应的属性信息才会输出到界面上 */
+    */
+/** 用于实现过滤指定的字符串，当只有指定的字符串模式被满足时，相应的属性信息才会输出到界面上 *//*
+
     private static class PropertyPreOnlyFilter implements PropertyPreFilter {
         private static Map<List<String>, IncludeProperty> cacheMap = Maps.newHashMap();
         private static Pattern validPropertyPattern = Pattern.compile("^[_a-zA-Z0-9]+(?:\\.(?:[_a-zA-Z0-9]+|\\*))*$");
@@ -152,7 +163,9 @@ public class JsonUtils {
             return containInclude(nowPath);
         }
 
-        /** 输出结果 类似a.b.c.d等格式，忽略[] */
+        */
+/** 输出结果 类似a.b.c.d等格式，忽略[] *//*
+
         private static String getLinkedPath(SerialContext serialContext) {
             //这里有点bad smell，即要考虑parent为null,又要考虑fieldName为null，且对collection判断只能从fieldName，而不能从object入手
             boolean isCollection = serialContext.getFieldName() instanceof Integer;
@@ -231,3 +244,4 @@ public class JsonUtils {
         }
     }
 }
+*/

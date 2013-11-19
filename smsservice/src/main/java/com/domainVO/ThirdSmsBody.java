@@ -14,7 +14,15 @@ public class ThirdSmsBody {
     private String reserve;
     private Long userId;
     private String sernum;
+    private String passWord;
 
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
 
     public Long getUserId() {
         return userId;

@@ -1,5 +1,7 @@
 package com.controller;
 
+import com.common.utils.CommonUtil;
+import com.common.utils.MMSfactory;
 import com.domainVO.*;
 import com.service.DataAccessService;
 import org.apache.commons.lang.StringUtils;
@@ -7,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,21 +58,37 @@ public class SmsController{
         if(loginVo==null||loginVo.getUserId()==null||loginVo.getPassWord()==null)return "login";
         SessionVo sessionVo = dataAccessService.getLoginVo(loginVo);
         if(sessionVo==null||sessionVo.getId()==null||sessionVo.getId()==0)return "login";
+        if(!"1".equals(sessionVo.getRole()) ){return "login";}
         HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_KEY,sessionVo);
         return "mainPage";
     }
-
+    @RequestMapping("/mms/mmsPage")
+    public String mmsPage(){
+        return "mmsPage";
+    }
     @RequestMapping("/sms/mainPage")
     public String mainPage(){
-
         return "mainPage";
+    }
+    @RequestMapping("/sms/top")
+    public String topPage(){
+        return "files/top";
+    }
+    @RequestMapping("/sms/left")
+    public String leftPage(){
+        return "files/left";
+    }
+    @RequestMapping("/sms/mainfra")
+    public String mainfra(){
+        return "files/mainfra";
     }
 
     @RequestMapping("/sms/smsPage")
      public String smsPage(){
         return "smsPage";
      }
+
 
     @RequestMapping(value = "/sms/insertActive")
     @ResponseBody
@@ -122,6 +140,7 @@ public class SmsController{
             for(MultipartFile multipartFile:multipartFiles){
                 if(multipartFile.isEmpty()){
                     rsStr="请现在文件后上传";
+                    continue;
                 } else {
 
                     List<SmsBody> slist=new ArrayList<SmsBody>();
@@ -164,20 +183,76 @@ public class SmsController{
          return rsStr;
     }
 
+    @RequestMapping(value = "/mms/mmsSend")
+    @ResponseBody
+    public Object mmsSend(HttpSession session,@RequestParam("multipartFiles")MultipartFile[] multipartFiles,SmsBody smsBody,
+                          HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String res="";
+          if (multipartFiles!=null){
+              MM7VO mm7VO=new MM7VO();
+              mm7VO.setPhone(smsBody.getPhoneNo());
+              mm7VO.setTitle("-");
+              mm7VO.setYewuCode("3181213802");
+              mm7VO.setYewuNum("106289974");
+              Map map= CommonUtil.filterTxt(multipartFiles);    //过滤出图片文件
+
+              List<AttVo> attVos=new ArrayList<AttVo>();
+
+              for (MultipartFile multipartFile:multipartFiles){
+                  if (multipartFile.isEmpty()){
+                      res="没有上传文件";
+                  }else {
+                      if(multipartFile.getOriginalFilename().endsWith(".txt")){
+                          InputStream inputStream = multipartFile.getInputStream();
+                          byte [] bytes = new byte[inputStream.available()];
+                          inputStream.read(bytes);
+                          inputStream.close();
+
+                          AttVo attVo=new AttVo();
+                          MultipartFile txt=(MultipartFile)map.get(multipartFile.getOriginalFilename().substring(0,multipartFile.getOriginalFilename().lastIndexOf(".")));
+                          InputStream inputStreamtxt = txt.getInputStream();
+                          byte [] bytestxt = new byte[inputStreamtxt.available()];
+                          inputStreamtxt.read(bytestxt);
+                          inputStreamtxt.close();
+                          attVo.setAttbytes( bytestxt);  //图片附件
+                          attVo.setTxtBytes(bytes);//txt附件
+                          attVo.setAttName(txt.getOriginalFilename());
+                          attVo.setTxtName( multipartFile.getOriginalFilename());
+                          attVo.setAtttype(txt.getContentType());
+                          attVo.setTxttype( multipartFile.getContentType());
+                          attVos.add(attVo);
+                      }
+                      mm7VO.setAttVoList(attVos);
+
+                      //mm7VO.setAttName(MD5Code.getInstance().getCode(String.valueOf(System.currentTimeMillis()))+multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".")));
+
+                  }
+              }
+              MMSfactory mmSfactory=new MMSfactory(mm7VO);
+              mmSfactory.send();
+          }
+        return res;
+    }
+
     /**第三方接口*/
-    @RequestMapping(value = "/sms/thirdPartImpl",method = RequestMethod.POST)
+    @RequestMapping(value = "/third/thirdPartImpl")
     @ResponseBody
     public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody,
                                 HttpServletRequest request, HttpServletResponse response){
         //setSession(request);
 
-        if(session==null)return "请到登录页面登录！";
+        /*if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
-        if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
+        if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";*/
         if(thirdSmsBody==null||"".equals(thirdSmsBody.getPhoneNo()))return "err";
+        LoginVo loginVo=new LoginVo();
+        loginVo.setUserId(thirdSmsBody.getUserId().toString());
+        loginVo.setPassWord(thirdSmsBody.getPassWord());
+        SessionVo sessionVo = dataAccessService.getLoginVo(loginVo);
+        if(sessionVo==null||"".equals(thirdSmsBody.getPhoneNo())||thirdSmsBody.getPhoneNo()==null)return "erruserorphone";
 
          String[] phones = StringUtils.split(thirdSmsBody.getPhoneNo(),",");
-        if(phones==null||phones.length==0)return "err";
+        if(phones==null||phones.length==0||phones.length>100)return "errphone";
         List<SmsBody> slist=new ArrayList<SmsBody>();
         for(String linText:phones){
             if(linText!=null&&!"".equals(linText)&&linText.length()>=11){
