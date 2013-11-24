@@ -1,9 +1,9 @@
 package com.controller;
 
 import com.common.utils.CommonUtil;
-import com.common.utils.MMSfactory;
 import com.domainVO.*;
 import com.service.DataAccessService;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -113,6 +113,7 @@ public class SmsController{
         if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
         if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
+        if(!"1".equals(sessionVo.getRole()) ){return "noRole";}
         smsBody.setMsg("".equals(smsBody.getMsg())?null:smsBody.getMsg());
         smsBody.setPhoneNo("".equals(smsBody.getPhoneNo())?null:smsBody.getPhoneNo());
         smsBody.setServiceId("".equals(smsBody.getServiceId())?null:smsBody.getServiceId());
@@ -126,7 +127,7 @@ public class SmsController{
         return "ok" ;
     }
 
-    /*批量那个发送短信*/
+    /*批量发送短信*/
     @RequestMapping(value = "/sms/batchSendSMS")
     @ResponseBody
     public Object batchSendSMS(HttpSession session,@RequestParam("multipartFiles")MultipartFile[] multipartFiles,SmsBody smsBody,
@@ -134,6 +135,7 @@ public class SmsController{
         if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
         if(sessionVo.getId()==null || sessionVo.getId()==0)return "请到登录页面登录！";
+        if(!"1".equals(sessionVo.getRole()) ){return "noRole";}
 
         String rsStr="err";
         if(multipartFiles!=null){
@@ -183,11 +185,65 @@ public class SmsController{
          return rsStr;
     }
 
+    @RequestMapping(value = "/sms/sendSmsByGroupNo")    //根据组号发送短信
+    @ResponseBody
+    public Object sendSmsByGroupNo(HttpSession session,SmsBody smsBody){
+        SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
+        if (sessionVo==null||smsBody==null||smsBody.getPhoneNo()==null||"".equals(smsBody.getPhoneNo())){return 0;}
+        if(!"1".equals(sessionVo.getRole()) ){return "noRole";}
+        SmsBody s=new SmsBody();
+        s.setServiceId("106289975");
+        s.setUserId(sessionVo.getId());
+        s.setPhoneNo(smsBody.getPhoneNo());
+        s.setMsg(smsBody.getMsg());
+        s.setReserve("000000");
+        return dataAccessService.insertSmsByGroup(s);
+    }
+
     @RequestMapping(value = "/mms/mmsSend")
     @ResponseBody
     public Object mmsSend(HttpSession session,@RequestParam("multipartFiles")MultipartFile[] multipartFiles,SmsBody smsBody,
                           HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String res="";
+        //setSession(request);  //当发布时去掉此行
+        SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
+        if(sessionVo==null || !"1".equals(sessionVo.getRole())){return "noRole";}
+        String firstPath=CommonUtil.getTodyString();
+        String path="D:\\mmsFile\\"+firstPath+"\\";
+        File fileDir=new File(path);
+        if(!fileDir.exists()){fileDir.mkdirs();}
+
+        String r="";//文件路径字符串
+        List<String> phoneList=new ArrayList<String>();//解析后的号码列表
+        if (multipartFiles != null) {
+            for (MultipartFile multipartFile : multipartFiles) {
+                FileUtils.copyInputStreamToFile(multipartFile.getInputStream(),new File(path,multipartFile.getOriginalFilename()));
+                if(!"phones.txt".equalsIgnoreCase(multipartFile.getOriginalFilename())){
+                    r+=multipartFile.getOriginalFilename()+",";
+                } else if("phones.txt".equalsIgnoreCase(multipartFile.getOriginalFilename())){  //解析号码文件
+                    CommonUtil.phoneNumber2List(multipartFile.getInputStream(),phoneList);
+                }
+            }
+            r=r.substring(0,r.lastIndexOf(","));
+
+            List<MM7TableVO> mm7TableVOs=new ArrayList<MM7TableVO>();
+            /*为彩信待发表组装list*/
+            for (String pnum : phoneList){
+                MM7TableVO mm7TableVO=new MM7TableVO();
+                mm7TableVO.setPhoneNo(pnum);
+                mm7TableVO.setFirstPath(path);
+                mm7TableVO.setPaths(r);
+                mm7TableVO.setServiceCode("3181213802");
+                mm7TableVO.setServiceId("106289974");
+                mm7TableVO.setUserId(String.valueOf(sessionVo.getId()));
+                mm7TableVOs.add(mm7TableVO);
+            }
+
+           return dataAccessService.batchSendMMS(mm7TableVOs);
+        }
+
+        return "err";
+        //============================================================================================
+        /*String res="";
           if (multipartFiles!=null){
               MM7VO mm7VO=new MM7VO();
               mm7VO.setPhone(smsBody.getPhoneNo());
@@ -223,15 +279,12 @@ public class SmsController{
                           attVos.add(attVo);
                       }
                       mm7VO.setAttVoList(attVos);
-
-                      //mm7VO.setAttName(MD5Code.getInstance().getCode(String.valueOf(System.currentTimeMillis()))+multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".")));
-
                   }
               }
               MMSfactory mmSfactory=new MMSfactory(mm7VO);
               mmSfactory.send();
           }
-        return res;
+        return res;*/
     }
 
     /**第三方接口*/
@@ -239,7 +292,6 @@ public class SmsController{
     @ResponseBody
     public Object thirdPartImpl(HttpSession session,ThirdSmsBody thirdSmsBody,
                                 HttpServletRequest request, HttpServletResponse response){
-        //setSession(request);
 
         /*if(session==null)return "请到登录页面登录！";
         SessionVo sessionVo =(SessionVo) session.getAttribute(SESSION_KEY);
@@ -290,6 +342,7 @@ public class SmsController{
         HttpSession session =  request.getSession();
         SessionVo sessionVo =new SessionVo() ;
         sessionVo.setId(88L);
+        sessionVo.setRole("1");
         session.setAttribute(SESSION_KEY,sessionVo);
     }
 

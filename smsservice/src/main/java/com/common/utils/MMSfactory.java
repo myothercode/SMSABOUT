@@ -2,6 +2,8 @@ package com.common.utils;
 
 import com.domainVO.AttVo;
 import com.domainVO.MM7VO;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +18,7 @@ import java.net.Socket;
  * To change this template use File | Settings | File Templates.
  */
 public class MMSfactory {
+    private static final Log logger = LogFactory.getLog(MMSfactory.class);
     //private String serviceIP="119.6.251.96"; //10.143.9.128
     private String serviceIP="10.143.9.128";
     private int port=80;
@@ -167,6 +170,7 @@ public void send() {
         String r="";
         while ((r=dis.readLine())  !=null){
             System.out.println(r);
+            logger.error(r);
         }
 
 
@@ -174,6 +178,7 @@ public void send() {
 
     }catch (Exception e){
        e.printStackTrace();
+        logger.error(e.getMessage(),e);
     }
     finally {
         try {
