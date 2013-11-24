@@ -1,9 +1,6 @@
 package com.common;
 
 import com.domainVO.SessionVo;
-import com.service.DataAccessService;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             p.print("error!");
             return false;
         }
+
         return true;
     }
 
