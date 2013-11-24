@@ -9,17 +9,15 @@ import com.sgip.domain.sgip.action.Bind;
 import com.sgip.domain.sgip.action.Submit;
 import com.sgip.domain.sgip.action.UnBind;
 import com.sgip.domain.sgip.part.BuesinessClass;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import static com.sgip.domain.VO.SPConfig.*;
+
+import static com.sgip.domain.VO.SPConfig.SGIP_UNBIND_RESP;
+import static com.sgip.domain.VO.SPConfig.byteOrder;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,18 +1,15 @@
 package com.sgip.comm.service.impl;
 
-import com.sgip.domain.QueueAndPools;
 import com.sgip.domain.VO.SMSBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +27,7 @@ public class GetFromDB {
     public List<SMSBody> getSmsList(){
         String sql="select top 20 sendtb.idnum, sendtb.serviceid,sendtb.mobile_no,sendtb.msg,sendtb.reserve from sms_send_tb sendtb " +
                 "left join sms_user_tb usertb on sendtb.user_id = usertb.id " +
-                "where sendtb.flag='0' and usertb.totalnum>=usertb.usenum and usertb.totalnum is not null " +
+                "where sendtb.flag='0' and usertb.totalnum>=5 and usertb.totalnum is not null " +
                 "order by sendtb.idnum asc";
         //Object[] params = new Object[]{loginId};
         List<SMSBody> list=jdbcTemplate.query(sql,new DataMapperD());
@@ -39,7 +36,7 @@ public class GetFromDB {
     }
 
     public void updateFlag(Long id){
-        String sql="update sms_send_tb set flag='1',sendTime=getdate() where flag='0' and idnum=?";
+        String sql="update sms_send_tb set flag=flag+1,sendTime=getdate() where flag='0' and idnum=?";
         Object[] params = new Object[]{id};
         jdbcTemplate.update(sql,params);
     }

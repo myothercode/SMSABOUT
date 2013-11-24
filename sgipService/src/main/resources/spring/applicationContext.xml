@@ -52,7 +52,7 @@
     </bean>
 
     <!--定时任务-->
-     <bean class="com.main.task.ScheduledTask" id="scheduledTask"/>
+     <!--<bean class="com.main.task.ScheduledTask" id="scheduledTask1"/>-->
     <task:scheduled-tasks>
         <task:scheduled ref="scheduledTask" method="getSmsFronDB" cron="2/5 * * * * ?"/><!--延迟3秒启动间隔8秒-->
     </task:scheduled-tasks>

@@ -10,34 +10,34 @@ import static com.sgip.domain.VO.SPConfig.*;
 
 public class Submit {
 	
-	public String UserNumber;        //21B ½ÓÊÕ¸Ã¶ÌÏûÏ¢µÄÊÖ»úºÅ£¬¸Ã×Ö¶ÎÖØ¸´UserCountÖ¸¶¨µÄ´ÎÊı£¬ÊÖ»úºÅÂëÇ°¼Ó"86"¹ú±ğ±êÖ¾¡­  ¡­  ¡­  ¡­		
-	public String ServiceType;       //10B ÒµÎñ´úÂë£¬ÓÉSP¶¨Òå
-	public byte FeeType;             //1B ¼Æ·ÑÀàĞÍ 1Ãâ·Ñ,2,°´Ìõ¼Æ·Ñ,3°üÔÂ¼Æ·Ñ
-	public String FeeValue;          //6B È¡Öµ·¶Î§0-99999£¬¸ÃÌõ¶ÌÏûÏ¢µÄÊÕ·ÑÖµ£¬µ¥Î»Îª·Ö£¬ÓÉSP¶¨Òå¶ÔÓÚ°üÔÂÖÆÊÕ·ÑµÄÓÃ»§£¬¸ÃÖµÎªÔÂ×â·ÑµÄÖµ
-	public byte MorelatetoMTFlag;    //1B ÒıÆğMTÏûÏ¢µÄÔ­Òò0-MOµã²¥ÒıÆğµÄµÚÒ»ÌõMTÏûÏ¢£»1-MOµã²¥ÒıÆğµÄ·ÇµÚÒ»ÌõMTÏûÏ¢£»2-·ÇMOµã²¥ÒıÆğµÄMTÏûÏ¢£»3-ÏµÍ³·´À¡ÒıÆğµÄMTÏûÏ¢¡£
-	public String MessageContent;    //Message Length  ¶ÌÏûÏ¢µÄÄÚÈİ
-	public String Reserve;           //8B ±£Áô£¬À©Õ¹ÓÃ
+	public String UserNumber;        //21B æ¥æ”¶è¯¥çŸ­æ¶ˆæ¯çš„æ‰‹æœºå·ï¼Œè¯¥å­—æ®µé‡å¤UserCountæŒ‡å®šçš„æ¬¡æ•°ï¼Œæ‰‹æœºå·ç å‰åŠ "86"å›½åˆ«æ ‡å¿—â€¦  â€¦  â€¦  â€¦		
+	public String ServiceType;       //10B ä¸šåŠ¡ä»£ç ï¼Œç”±SPå®šä¹‰
+	public byte FeeType;             //1B è®¡è´¹ç±»å‹ 1å…è´¹,2,æŒ‰æ¡è®¡è´¹,3åŒ…æœˆè®¡è´¹
+	public String FeeValue;          //6B å–å€¼èŒƒå›´0-99999ï¼Œè¯¥æ¡çŸ­æ¶ˆæ¯çš„æ”¶è´¹å€¼ï¼Œå•ä½ä¸ºåˆ†ï¼Œç”±SPå®šä¹‰å¯¹äºåŒ…æœˆåˆ¶æ”¶è´¹çš„ç”¨æˆ·ï¼Œè¯¥å€¼ä¸ºæœˆç§Ÿè´¹çš„å€¼
+	public byte MorelatetoMTFlag;    //1B å¼•èµ·MTæ¶ˆæ¯çš„åŸå› 0-MOç‚¹æ’­å¼•èµ·çš„ç¬¬ä¸€æ¡MTæ¶ˆæ¯ï¼›1-MOç‚¹æ’­å¼•èµ·çš„éç¬¬ä¸€æ¡MTæ¶ˆæ¯ï¼›2-éMOç‚¹æ’­å¼•èµ·çš„MTæ¶ˆæ¯ï¼›3-ç³»ç»Ÿåé¦ˆå¼•èµ·çš„MTæ¶ˆæ¯ã€‚
+	public String MessageContent;    //Message Length  çŸ­æ¶ˆæ¯çš„å†…å®¹
+	public String Reserve;           //8B ä¿ç•™ï¼Œæ‰©å±•ç”¨
 
-	public int MessageLength;        //4B Integer ¶ÌÏûÏ¢µÄ³¤¶È
-	public String ChargeNumber;      //21B ¸¶·ÑºÅÂë£¬ÊÖ»úºÅÂëÇ°¼Ó"86"¹ú±ğ±êÖ¾£»µ±ÇÒ½öµ±Èº·¢ÇÒ¶ÔÓÃ»§ÊÕ·ÑÊ±Îª¿Õ£»Èç¹ûÎª¿Õ£¬Ôò¸ÃÌõ¶ÌÏûÏ¢²úÉúµÄ·ÑÓÃÓÉUserNumber´ú±íµÄÓÃ»§Ö§¸¶£»Èç¹ûÎªÈ«Áã×Ö·û´®"000000000000000000000"£¬±íÊ¾¸ÃÌõ¶ÌÏûÏ¢²úÉúµÄ·ÑÓÃÓÉSPÖ§¸¶¡£
+	public int MessageLength;        //4B Integer çŸ­æ¶ˆæ¯çš„é•¿åº¦
+	public String ChargeNumber;      //21B ä»˜è´¹å·ç ï¼Œæ‰‹æœºå·ç å‰åŠ "86"å›½åˆ«æ ‡å¿—ï¼›å½“ä¸”ä»…å½“ç¾¤å‘ä¸”å¯¹ç”¨æˆ·æ”¶è´¹æ—¶ä¸ºç©ºï¼›å¦‚æœä¸ºç©ºï¼Œåˆ™è¯¥æ¡çŸ­æ¶ˆæ¯äº§ç”Ÿçš„è´¹ç”¨ç”±UserNumberä»£è¡¨çš„ç”¨æˆ·æ”¯ä»˜ï¼›å¦‚æœä¸ºå…¨é›¶å­—ç¬¦ä¸²"000000000000000000000"ï¼Œè¡¨ç¤ºè¯¥æ¡çŸ­æ¶ˆæ¯äº§ç”Ÿçš„è´¹ç”¨ç”±SPæ”¯ä»˜ã€‚
 	
-	public String SPNumber="";          //21B SPµÄ½ÓÈëºÅÂë==========
-	public byte UserCount=1;           //1B ½ÓÊÕ¶ÌÏûÏ¢µÄÊÖ»úÊıÁ¿£¬È¡Öµ·¶Î§1ÖÁ100
-	public String CorpId= SPConfig.CorpId;            //5B ÆóÒµ´úÂë£¬È¡Öµ·¶Î§0-99999===========
-	public String GivenValue="0";        //6B È¡Öµ·¶Î§0-99999£¬ÔùËÍÓÃ»§µÄ»°·Ñ£¬µ¥Î»Îª·Ö£¬ÓÉSP¶¨Òå£¬ÌØÖ¸ÓÉSPÏòÓÃ»§·¢ËÍ¹ã¸æÊ±µÄÔùËÍ»°·Ñ
-	public byte AgentFlag=1;           //1B ´úÊÕ·Ñ±êÖ¾£¬0£ºÓ¦ÊÕ£»1£ºÊµÊÕ
-	public byte Priority=0;            //1B ÓÅÏÈ¼¶0-9´ÓµÍµ½¸ß£¬Ä¬ÈÏÎª0
-	public String ExpireTime="";        //16B ¶ÌÏûÏ¢ÊÙÃüµÄÖÕÖ¹Ê±¼ä£¬Èç¹ûÎª¿Õ£¬±íÊ¾Ê¹ÓÃ¶ÌÏûÏ¢ÖĞĞÄµÄÈ±Ê¡Öµ¡£Ê±¼äÄÚÈİÎª16¸ö×Ö·û£¬¸ñÊ½Îª"yymmddhhmmsstnnp" £¬ÆäÖĞ"tnnp"È¡¹Ì¶¨Öµ"032+"£¬¼´Ä¬ÈÏÏµÍ³Îª±±¾©Ê±¼ä
-	public String ScheduleTime="";      //16B ¶ÌÏûÏ¢¶¨Ê±·¢ËÍµÄÊ±¼ä£¬Èç¹ûÎª¿Õ£¬±íÊ¾Á¢¿Ì·¢ËÍ¸Ã¶ÌÏûÏ¢¡£Ê±¼äÄÚÈİÎª16¸ö×Ö·û£¬¸ñÊ½Îª"yymmddhhmmsstnnp" £¬ÆäÖĞ"tnnp"È¡¹Ì¶¨Öµ"032+"£¬¼´Ä¬ÈÏÏµÍ³Îª±±¾©Ê±¼ä
-	public byte ReportFlag=1;          //1B ×´Ì¬±¨¸æ±ê¼Ç0-¸ÃÌõÏûÏ¢Ö»ÓĞ×îºó³ö´íÊ±Òª·µ»Ø×´Ì¬±¨¸æ1-¸ÃÌõÏûÏ¢ÎŞÂÛ×îºóÊÇ·ñ³É¹¦¶¼Òª·µ»Ø×´Ì¬±¨¸æ2-¸ÃÌõÏûÏ¢²»ĞèÒª·µ»Ø×´Ì¬±¨¸æ3-¸ÃÌõÏûÏ¢½öĞ¯´ø°üÔÂ¼Æ·ÑĞÅÏ¢£¬²»ÏÂ·¢¸øÓÃ»§£¬Òª·µ»Ø×´Ì¬±¨¸æÆäËü-±£ÁôÈ±Ê¡ÉèÖÃÎª0
-	public byte TP_pid=0;              //1B GSMĞ­ÒéÀàĞÍ¡£ÏêÏ¸½âÊÍÇë²Î¿¼GSM03.40ÖĞµÄ9.2.3.9
-	public byte TP_udhi=0;             //1B GSMĞ­ÒéÀàĞÍ¡£ÏêÏ¸½âÊÍÇë²Î¿¼GSM03.40ÖĞµÄ9.2.3.23,½öÊ¹ÓÃ1Î»£¬ÓÒ¶ÔÆë
-	public byte MessageCoding=15;       //1B ¶ÌÏûÏ¢µÄ±àÂë¸ñÊ½¡£0£º´¿ASCII×Ö·û´®3£ºĞ´¿¨²Ù×÷4£º¶ş½øÖÆ±àÂë8£ºUCS2±àÂë15: GBK±àÂëÆäËü²Î¼ûGSM3.38µÚ4½Ú£ºSMS Data Coding Scheme
-	public byte MessageType=0;         //1B ĞÅÏ¢ÀàĞÍ£º0-¶ÌÏûÏ¢ĞÅÏ¢ÆäËü£º´ı¶¨
+	public String SPNumber="";          //21B SPçš„æ¥å…¥å·ç ==========
+	public byte UserCount=1;           //1B æ¥æ”¶çŸ­æ¶ˆæ¯çš„æ‰‹æœºæ•°é‡ï¼Œå–å€¼èŒƒå›´1è‡³100
+	public String CorpId= SPConfig.CorpId;            //5B ä¼ä¸šä»£ç ï¼Œå–å€¼èŒƒå›´0-99999===========
+	public String GivenValue="0";        //6B å–å€¼èŒƒå›´0-99999ï¼Œèµ é€ç”¨æˆ·çš„è¯è´¹ï¼Œå•ä½ä¸ºåˆ†ï¼Œç”±SPå®šä¹‰ï¼Œç‰¹æŒ‡ç”±SPå‘ç”¨æˆ·å‘é€å¹¿å‘Šæ—¶çš„èµ é€è¯è´¹
+	public byte AgentFlag=1;           //1B ä»£æ”¶è´¹æ ‡å¿—ï¼Œ0ï¼šåº”æ”¶ï¼›1ï¼šå®æ”¶
+	public byte Priority=0;            //1B ä¼˜å…ˆçº§0-9ä»ä½åˆ°é«˜ï¼Œé»˜è®¤ä¸º0
+	public String ExpireTime="";        //16B çŸ­æ¶ˆæ¯å¯¿å‘½çš„ç»ˆæ­¢æ—¶é—´ï¼Œå¦‚æœä¸ºç©ºï¼Œè¡¨ç¤ºä½¿ç”¨çŸ­æ¶ˆæ¯ä¸­å¿ƒçš„ç¼ºçœå€¼ã€‚æ—¶é—´å†…å®¹ä¸º16ä¸ªå­—ç¬¦ï¼Œæ ¼å¼ä¸º"yymmddhhmmsstnnp" ï¼Œå…¶ä¸­"tnnp"å–å›ºå®šå€¼"032+"ï¼Œå³é»˜è®¤ç³»ç»Ÿä¸ºåŒ—äº¬æ—¶é—´
+	public String ScheduleTime="";      //16B çŸ­æ¶ˆæ¯å®šæ—¶å‘é€çš„æ—¶é—´ï¼Œå¦‚æœä¸ºç©ºï¼Œè¡¨ç¤ºç«‹åˆ»å‘é€è¯¥çŸ­æ¶ˆæ¯ã€‚æ—¶é—´å†…å®¹ä¸º16ä¸ªå­—ç¬¦ï¼Œæ ¼å¼ä¸º"yymmddhhmmsstnnp" ï¼Œå…¶ä¸­"tnnp"å–å›ºå®šå€¼"032+"ï¼Œå³é»˜è®¤ç³»ç»Ÿä¸ºåŒ—äº¬æ—¶é—´
+	public byte ReportFlag=1;          //1B çŠ¶æ€æŠ¥å‘Šæ ‡è®°0-è¯¥æ¡æ¶ˆæ¯åªæœ‰æœ€åå‡ºé”™æ—¶è¦è¿”å›çŠ¶æ€æŠ¥å‘Š1-è¯¥æ¡æ¶ˆæ¯æ— è®ºæœ€åæ˜¯å¦æˆåŠŸéƒ½è¦è¿”å›çŠ¶æ€æŠ¥å‘Š2-è¯¥æ¡æ¶ˆæ¯ä¸éœ€è¦è¿”å›çŠ¶æ€æŠ¥å‘Š3-è¯¥æ¡æ¶ˆæ¯ä»…æºå¸¦åŒ…æœˆè®¡è´¹ä¿¡æ¯ï¼Œä¸ä¸‹å‘ç»™ç”¨æˆ·ï¼Œè¦è¿”å›çŠ¶æ€æŠ¥å‘Šå…¶å®ƒ-ä¿ç•™ç¼ºçœè®¾ç½®ä¸º0
+	public byte TP_pid=0;              //1B GSMåè®®ç±»å‹ã€‚è¯¦ç»†è§£é‡Šè¯·å‚è€ƒGSM03.40ä¸­çš„9.2.3.9
+	public byte TP_udhi=0;             //1B GSMåè®®ç±»å‹ã€‚è¯¦ç»†è§£é‡Šè¯·å‚è€ƒGSM03.40ä¸­çš„9.2.3.23,ä»…ä½¿ç”¨1ä½ï¼Œå³å¯¹é½
+	public byte MessageCoding=15;       //1B çŸ­æ¶ˆæ¯çš„ç¼–ç æ ¼å¼ã€‚0ï¼šçº¯ASCIIå­—ç¬¦ä¸²3ï¼šå†™å¡æ“ä½œ4ï¼šäºŒè¿›åˆ¶ç¼–ç 8ï¼šUCS2ç¼–ç 15: GBKç¼–ç å…¶å®ƒå‚è§GSM3.38ç¬¬4èŠ‚ï¼šSMS Data Coding Scheme
+	public byte MessageType=0;         //1B ä¿¡æ¯ç±»å‹ï¼š0-çŸ­æ¶ˆæ¯ä¿¡æ¯å…¶å®ƒï¼šå¾…å®š
 
 	public String idnum;
 	
-	public static final int STRUCT_SIZE=144;//²»º¬¶ÌÏûÏ¢ÄÚÈİµÄ³¤¶È
+	public static final int STRUCT_SIZE=144;//ä¸å«çŸ­æ¶ˆæ¯å†…å®¹çš„é•¿åº¦
 	
 	public Head head = null;
 	
@@ -116,8 +116,8 @@ public class Submit {
 	}
 	public ByteBuffer getAllSubmitBuffer() {
 		this.head.msgLen=this.STRUCT_SIZE+MessageContent.getBytes().length+this.head.STRUCT_SIZE;
-		System.out.println("×ÜÏûÏ¢³¤¶ÈÊÇ£º"+this.head.msgLen+"::¶ÌÏûÏ¢ÄÚÈİ³¤¶È:"+MessageContent.getBytes().length);
-		System.out.println("ÏûÏ¢ÊÇ£º"+this.MessageContent);
+
+		System.out.println("æ¶ˆæ¯æ˜¯ï¼š"+this.MessageContent);
 		ByteBuffer buffer = ByteBuffer.allocate(this.head.msgLen);
 		buffer.order(byteOrder);
 		buffer.put(this.head.getBuffer());
