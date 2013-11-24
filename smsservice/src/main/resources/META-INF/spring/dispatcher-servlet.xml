@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -11,7 +11,6 @@
             <mvc:mapping path="/mms/*"/>
             <bean class="com.common.LoginInterceptor"></bean>
         </mvc:interceptor>
-
     </mvc:interceptors>
     
     
@@ -30,11 +29,24 @@
     <context:annotation-config />
     <context:component-scan base-package="com.*.*,com.*" />
 
-    <!-- SpringMVC上传文件时,需配置MultipartResolver处理器 ggg-->
+    <!-- SpringMVC上传文件时,需配置MultipartResolver处理器 bbb-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!-- 指定所上传文件的总大小不能超过800KB......注意maxUploadSize属性的限制不是针对单个文件,而是所有文件的容量之和 -->
-        <property name="maxUploadSize" value="2000000"/>
+        <property name="maxUploadSize" value="5000000"/>
     </bean>
+    <!--定时任务，获取数据库彩信
+    <task:scheduled-tasks>
+        <task:scheduled ref="getMMSFromDB" method="queryMMSList" cron="2/5 * * * * ?"/>&lt;!&ndash;延迟3秒启动间隔8秒&ndash;&gt;
+        <task:scheduled ref="sendMMSThread" method="submitMMS" cron="3/30 * * * * ?"/>
+    </task:scheduled-tasks>
+    &lt;!&ndash;线程池&ndash;&gt;
+    <bean id="taskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2" />  &lt;!&ndash; 并发线程数,想达到真正的并发效果,最好对应CPU的线程数及核心数 &ndash;&gt;
+        <property name="keepAliveSeconds" value="1" />
+        <property name="maxPoolSize" value="2" />     &lt;!&ndash; 最大线程池容量 &ndash;&gt;
+        <property name="queueCapacity" value="25" />   &lt;!&ndash; 超过最大线程池容量后,允许的线程队列数 &ndash;&gt;
+    </bean>-->
 
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">

@@ -54,12 +54,20 @@
             <div class="control-group">
 
                 <!-- Text input-->
-                <%--@declare id="input01"--%><label class="control-label" for="input01">手机号码</label>
+                <%--@declare id="input01"--%>
+                <%--<label class="control-label" for="input01">手机号码</label>
                 <div class="controls">
                     <input type="text" placeholder="手机号码" class="input-xlarge" id="phoneNo" name='phoneNo' />
                     <p class="help-block">-</p>
                 </div>
-            </div>
+            </div>--%>
+                <div class="control-group">
+                    <label class="control-label">号码phones.txt</label>
+                    <!-- File Upload -->
+                    <div class="controls">
+                        <input class="input-file" id="phonesFile" name="multipartFiles" type="file" />
+                    </div>
+                </div>
 
             <div class="control-group">
                 <label class="control-label">-</label>

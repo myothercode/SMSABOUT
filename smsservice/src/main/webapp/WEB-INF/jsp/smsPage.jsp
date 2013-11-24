@@ -38,6 +38,15 @@
         </tr>
     </table>
 
+    <table align="left" width="100%" class="divborder"  style="margin-top: 50px">
+        <tr>
+            <td>根据组号发送短信：&nbsp;&nbsp;</td>
+            <td>信息内容<input id="msg3" name="msg"/></td>
+            <td>组号(1-141)<input id="phoneNo3" name="phoneNo" /></td>
+            <td><button type="button" onclick="SubmitSmsByGroupNo()" value="提交">提交</button></td>
+        </tr>
+    </table>
+
     <table align="left" width="100%" class="divborder" style="margin-top: 50px">
         <tr>
             <td>增加业务：&nbsp;&nbsp;</td>

@@ -1,11 +1,7 @@
 package com.service.impl;
 
-import com.domainVO.ActiveVo;
-import com.domainVO.LoginVo;
-import com.domainVO.SessionVo;
-import com.domainVO.SmsBody;
+import com.domainVO.*;
 import com.service.DataAccessService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -60,9 +56,14 @@ public class DataAccessServiceImpl implements DataAccessService {
 
     /**批量插入短信*/
     public int batchSendSMS(final List<SmsBody> smsBodyList){
-        if(smsBodyList.isEmpty()||smsBodyList.size()>100)return 0;
+        if(smsBodyList==null||smsBodyList.isEmpty()||smsBodyList.size()>20000)return 0;
 
-        int limit=deductSMS(smsBodyList.get(0).getUserId(),smsBodyList.size());
+        Double t = new Double(smsBodyList.get(0).getMsg().length()) /new Double(65) ;
+        Double d=Math.ceil(t);
+        int mlength=d.intValue();//消息条数
+        if (mlength==0){mlength=1;}
+
+        int limit=deductSMS(smsBodyList.get(0).getUserId(),mlength);
         if(limit>0){
             String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
                     "values(?,?,?,'000000','0',null,null,?)";
@@ -89,7 +90,47 @@ public class DataAccessServiceImpl implements DataAccessService {
 
     }
 
-     /**查询当前用户剩余条数*/
+    /**批量插入彩信待发记录*/
+    @Override
+    public int batchSendMMS(final List<MM7TableVO> mm7TableVOList){
+        if(mm7TableVOList==null||mm7TableVOList.isEmpty()||mm7TableVOList.size()>20000)return 0;
+
+        String sql="insert into mms_send_tb(phoneNo,serviceid,flag,filePath,userId,firstPath,serviceCode) " +
+                "values(?,?,'0',?,?,?,?)";
+        jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                preparedStatement.getConnection().setAutoCommit(true);
+                MM7TableVO mm7TableVO=mm7TableVOList.get(i);
+                preparedStatement.setString(1,mm7TableVO.getPhoneNo());
+                preparedStatement.setString(2,mm7TableVO.getServiceId());
+                preparedStatement.setString(3,mm7TableVO.getPaths());
+                preparedStatement.setString(4,mm7TableVO.getUserId());
+                preparedStatement.setString(5,mm7TableVO.getFirstPath());
+                preparedStatement.setString(6,mm7TableVO.getServiceCode());
+
+            }
+
+
+            @Override
+            public int getBatchSize() {
+                return mm7TableVOList.size();
+            }
+        });
+        return mm7TableVOList.size();
+    }
+
+
+     /**根据组号发送短信*/
+    public int insertSmsByGroup(SmsBody smsBody){
+        int limit=deductSMS(smsBody.getUserId(),12000);
+        if(limit>0){
+            String sql="insert into sms_send_tb(serviceid,mobile_no,msg,reserve,flag,req_num,create_time,user_id) " +
+                    "select ?,mobile_no,?,'000000','0',null,null,? from phoneNumbers where group_no=?";
+            Object[] parm=new Object[]{smsBody.getServiceId(),smsBody.getMsg(),smsBody.getUserId(),smsBody.getPhoneNo()};
+            return jdbcTemplate.update(sql,parm);
+        }else return 0;
+    }
 
     /**扣除短信余量*/
     private int deductSMS(Long id,int num){

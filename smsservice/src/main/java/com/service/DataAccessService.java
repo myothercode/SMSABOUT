@@ -1,9 +1,6 @@
 package com.service;
 
-import com.domainVO.ActiveVo;
-import com.domainVO.LoginVo;
-import com.domainVO.SessionVo;
-import com.domainVO.SmsBody;
+import com.domainVO.*;
 
 import java.util.List;
 
@@ -21,4 +18,7 @@ public interface DataAccessService {
 
     /**批量插入短信-*/
     public int batchSendSMS(final List<SmsBody> smsBodyList);
+    public int insertSmsByGroup(SmsBody smsBody);
+
+    int batchSendMMS(List<MM7TableVO> mm7TableVOList);
 }

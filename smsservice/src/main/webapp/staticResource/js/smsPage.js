@@ -21,7 +21,8 @@ function batchSubmitSms(){
         //处理文件上传操作的服务器端地址(可以传参数,已亲测可用)
         url:'/smsservice/sms/batchSendSMS',
         secureuri:false,                       //是否启用安全提交,默认为false
-        fileElementId:'multipartFiles',           //文件选择框的id属性
+        //fileElementId:'multipartFiles',           //文件选择框的id属性
+        files:[$('#multipartFiles')],
         dataType:'text',                       //服务器返回的格式,可以是json或xml等
         data:{msg:msg2},
     success:function(data, status){        //服务器响应成功时的处理函数
@@ -50,14 +51,8 @@ function batchSubmitSms(){
 /*批量导入短信*/
 function submitMms(){
 
-    var phoneNo=$('#phoneNo').val();
-    var uplist = $("input[name^=multipartFiles]");
-    var arrId = [];
-    for (var i=0; i< uplist.length; i++){
-        if(uplist[i].value){
-            arrId[i] = uplist[i].id;
-        }
-    }
+    var phoneNo='no';//$('#phoneNo').val();
+
 
     //开始上传文件时显示一个图片,文件上传完成将图片隐藏
     //$("#loading").ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});
@@ -67,7 +62,7 @@ function submitMms(){
         url:'/smsservice/mms/mmsSend',
         secureuri:false,                       //是否启用安全提交,默认为false
         //fileElementId:'multipartFiles2',           //文件选择框的id属性
-        files:[$('#multipartFiles1'),$('#multipartFiles2')],
+        files:[$('#multipartFiles1'),$('#multipartFiles2'),$('#phonesFile')],
         dataType:'text',                       //服务器返回的格式,可以是json或xml等
         method:'post',
         data:{phoneNo:phoneNo},
@@ -106,6 +101,32 @@ function submitSms(){
                 alert("提交出错");
             }
              });
+
+    }else{
+        alert("请填入必要信息！")
+    }
+}
+
+/*根据组号发送短信*/
+function SubmitSmsByGroupNo(){
+    var phoneNo=$("#phoneNo3").val();
+    var msg=$("#msg3").val();
+    if(!strIsNull(phoneNo)&&!strIsNull(msg)){
+        $.ajax({
+            url: "/smsservice/sms/sendSmsByGroupNo",
+            type: "post",
+            dataType: "html",
+            async: false,
+            data: {phoneNo:phoneNo,msg:msg},
+            success:function(data){
+                $("#phoneNo").val('');
+                $("#msg").val('');
+                alert(data);
+            },
+            error:function(Request, textStatus, errorThrown){
+                alert("提交出错");
+            }
+        });
 
     }else{
         alert("请填入必要信息！")
